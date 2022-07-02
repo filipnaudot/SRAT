@@ -1,7 +1,7 @@
 /**
- * @file main.c
+ * @file remote.c
  * @author Filip Naudot
- * @brief Remote acces tool capable of remote command execution aswell as file upload and download
+ * @brief Establishes a connection and executes commands
  * @version 0.1
  * @date 2022-07-02
  * 
