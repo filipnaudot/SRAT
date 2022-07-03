@@ -13,7 +13,8 @@
 
 int main(int argc, char *argv[]) {
     printf("Configuring local address...\n");
-    struct addrinfo hints;
+
+    addrinfo hints;
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;

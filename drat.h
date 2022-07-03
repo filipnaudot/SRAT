@@ -11,5 +11,7 @@
 #define SOCKET int // ?
 #define GETSOCKETERRNO() (errno)
 
+typedef struct addrinfo addrinfo;
+
 #include <stdio.h>
 #include <string.h>
