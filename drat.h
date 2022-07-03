@@ -8,7 +8,7 @@
 
 #define ISVALIDSOCKET(s) ((s) >= 0)
 #define CLOSESOCKET(s) close(s)
-#define SOCKET int // ?
+#define SOCKET int
 #define GETSOCKETERRNO() (errno)
 
 
