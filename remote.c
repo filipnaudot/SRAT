@@ -10,17 +10,8 @@
 #include "drat.h"
 #include <ctype.h>
 
-int main() {
 
-#if defined(_WIN32)
-    WSADATA d;
-    if (WSAStartup(MAKEWORD(2, 2), &d)) {
-        fprintf(stderr, "Failed to initialize.\n");
-        return 1;
-    }
-#endif
-
-
+int main(int argc, char *argv[]) {
     printf("Configuring local address...\n");
     struct addrinfo hints;
     memset(&hints, 0, sizeof(hints));
@@ -43,13 +34,11 @@ int main() {
 
 
     printf("Binding socket to local address...\n");
-    if (bind(socket_listen,
-                bind_address->ai_addr, bind_address->ai_addrlen)) {
+    if (bind(socket_listen, bind_address->ai_addr, bind_address->ai_addrlen)) {
         fprintf(stderr, "bind() failed. (%d)\n", GETSOCKETERRNO());
         return 1;
     }
     freeaddrinfo(bind_address);
-
 
     printf("Listening...\n");
     if (listen(socket_listen, 10) < 0) {
@@ -64,7 +53,6 @@ int main() {
 
     printf("Waiting for connections...\n");
 
-
     while(1) {
         fd_set reads;
         reads = master;
@@ -73,8 +61,7 @@ int main() {
             return 1;
         }
 
-        SOCKET i;
-        for(i = 1; i <= max_socket; ++i) {
+        for(SOCKET i = 1; i <= max_socket; ++i) {
             if (FD_ISSET(i, &reads)) {
 
                 if (i == socket_listen) {
@@ -90,14 +77,14 @@ int main() {
                     }
 
                     FD_SET(socket_client, &master);
-                    if (socket_client > max_socket)
+                    if (socket_client > max_socket) {
                         max_socket = socket_client;
+                    }
 
                     char address_buffer[100];
-                    getnameinfo((struct sockaddr*)&client_address,
-                            client_len,
-                            address_buffer, sizeof(address_buffer), 0, 0,
-                            NI_NUMERICHOST);
+                    getnameinfo((struct sockaddr*)&client_address, client_len,
+                                address_buffer, sizeof(address_buffer), 0, 0,
+                                NI_NUMERICHOST);
                     printf("New connection from %s\n", address_buffer);
 
                 } else {
@@ -108,10 +95,10 @@ int main() {
                         CLOSESOCKET(i);
                         continue;
                     }
-
-                    int j;
-                    for (j = 0; j < bytes_received; ++j)
+                    
+                    for (int j = 0; j < bytes_received; ++j) {
                         read[j] = toupper(read[j]);
+                    }
                     send(i, read, bytes_received, 0);
                 }
 
