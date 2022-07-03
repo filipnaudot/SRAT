@@ -102,12 +102,17 @@ int main(int argc, char *argv[]) {
                         CLOSESOCKET(i);
                         continue;
                     }
-
+                    
                     #ifdef DEBUG
                     for (int i = 0; i < bytes_received; i++) {
                         printf("%c", read[i]);
                     }
+                    printf("Number of commands: %d\n", num_commands(read, bytes_received));
                     #endif
+
+                    char** commands = malloc(num_commands(read, bytes_received) * sizeof(char*));
+
+                    parse_commands(read, bytes_received, commands);
 
                     for (int j = 0; j < bytes_received; ++j) {
                         read[j] = toupper(read[j]);
@@ -119,17 +124,41 @@ int main(int argc, char *argv[]) {
         } //for i to max_socket
     } //while(1)
 
-
-
-    printf("Closing listening socket...\n");
-    CLOSESOCKET(socket_listen);
-
-#if defined(_WIN32)
-    WSACleanup();
-#endif
-
-
-    printf("Finished.\n");
-
     return 0;
+}
+
+
+
+int num_commands(char* read, int bytes_received) {
+    int count = 0;
+    int in_word = false;
+
+    for(int i = 0; i < bytes_received; i++) {
+        if(read[i] == ' ' || read[i] == '\n' || read[i] == '\0') {
+            in_word = false;
+        } else {
+            if(!in_word) {
+                count++;
+                in_word = true;
+            }
+        }
+    }
+    return count;
+}
+
+
+
+
+void parse_commands(char* read, int bytes_received, char** commands) {
+    const char separator[2] = " ";
+    char *token;
+    
+    printf("Parsing commands...\n");
+    
+    token = strtok(read, separator); // first token
+    
+    while( token != NULL ) {
+        printf( " %s\n", token);
+        token = strtok(NULL, separator);
+    }
 }
