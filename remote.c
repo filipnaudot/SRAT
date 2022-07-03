@@ -102,9 +102,12 @@ int main(int argc, char *argv[]) {
                         CLOSESOCKET(i);
                         continue;
                     }
+
+                    #ifdef DEBUG
                     for (int i = 0; i < bytes_received; i++) {
                         printf("%c", read[i]);
                     }
+                    #endif
 
                     for (int j = 0; j < bytes_received; ++j) {
                         read[j] = toupper(read[j]);
