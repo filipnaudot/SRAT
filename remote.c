@@ -10,24 +10,25 @@
 #include "drat.h"
 #include <ctype.h>
 
+#define PORT "8080"
 
 int main(int argc, char *argv[]) {
     printf("Configuring local address...\n");
 
     addrinfo hints;
     memset(&hints, 0, sizeof(hints));
-    hints.ai_family = AF_INET;
+    hints.ai_family = AF_INET; // IPv4
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
 
-    struct addrinfo *bind_address;
-    getaddrinfo(0, "8080", &hints, &bind_address);
+    addrinfo *bind_address;
+    getaddrinfo(0, PORT, &hints, &bind_address);
 
 
     printf("Creating socket...\n");
     SOCKET socket_listen;
     socket_listen = socket(bind_address->ai_family,
-            bind_address->ai_socktype, bind_address->ai_protocol);
+                            bind_address->ai_socktype, bind_address->ai_protocol);
     if (!ISVALIDSOCKET(socket_listen)) {
         fprintf(stderr, "socket() failed. (%d)\n", GETSOCKETERRNO());
         return 1;
@@ -89,14 +90,22 @@ int main(int argc, char *argv[]) {
                     printf("New connection from %s\n", address_buffer);
 
                 } else {
-                    char read[1024];
-                    int bytes_received = recv(i, read, 1024, 0);
+                    char read[MAX_RECEIVE]; // Buffer to read in to
+                    int bytes_received = recv(i, read, MAX_RECEIVE, 0); // receieve MAX_RECEIVE bytes
+                    
+                    #ifdef DEBUG
+                    printf("Recieved %d bytes\n", bytes_received);
+                    #endif
+
                     if (bytes_received < 1) {
                         FD_CLR(i, &master);
                         CLOSESOCKET(i);
                         continue;
                     }
-                    
+                    for (int i = 0; i < bytes_received; i++) {
+                        printf("%c", read[i]);
+                    }
+
                     for (int j = 0; j < bytes_received; ++j) {
                         read[j] = toupper(read[j]);
                     }

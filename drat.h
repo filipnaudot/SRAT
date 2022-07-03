@@ -11,6 +11,10 @@
 #define SOCKET int // ?
 #define GETSOCKETERRNO() (errno)
 
+
+#define MAX_RECEIVE 1024
+
+
 typedef struct addrinfo addrinfo;
 
 #include <stdio.h>
