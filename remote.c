@@ -149,8 +149,9 @@ int num_commands(char* read, int bytes_received) {
                 count++;
                 in_word = true;
             }
-        }
-    }
+        } // else
+    } // for-loop
+     
     return count;
 }
 
