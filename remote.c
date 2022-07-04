@@ -92,7 +92,8 @@ int main(int argc, char *argv[]) {
                 } else {
                     char read[MAX_RECEIVE] = {0}; // Buffer to read in to (NOTE: move this out of loop?)
                     int bytes_received = recv(i, read, MAX_RECEIVE, 0); // receieve MAX_RECEIVE bytes
-                    
+                    read[bytes_received - 1] = '\0'; // remove traling new line char
+
                     #ifdef VERBOSE
                     printf("Recieved %d bytes\n", bytes_received);
                     #endif
@@ -176,6 +177,7 @@ void parse_commands(char* read, char** commands) {
         #ifdef VERBOSE
         printf("Command %d: %s\n", i+1, token);
         #endif
+
         commands[i] = token;
         token = strtok(NULL, separator);
         i++;
