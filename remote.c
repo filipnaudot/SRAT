@@ -151,11 +151,17 @@ int num_commands(char* read, int bytes_received) {
             }
         } // else
     } // for-loop
-     
+
     return count;
 }
 
 
+/**
+ * @brief parses the commands in a buffer
+ * 
+ * @param read the buffer to parse
+ * @param commands the buffer to place commands in
+ */
 void parse_commands(char* read, char** commands) {
     const char separator[2] = " ";
     char *token;
