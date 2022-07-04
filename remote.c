@@ -128,7 +128,13 @@ int main(int argc, char *argv[]) {
 }
 
 
-
+/**
+ * @brief Counts the number of commands in a buffer
+ * 
+ * @param read the receive data buffer
+ * @param bytes_received the number of bytes received
+ * @return int the number of commands
+ */
 int num_commands(char* read, int bytes_received) {
     int count = 0;
     int in_word = false;
@@ -147,8 +153,6 @@ int num_commands(char* read, int bytes_received) {
 }
 
 
-
-
 void parse_commands(char* read, char** commands) {
     const char separator[2] = " ";
     char *token;
@@ -158,9 +162,13 @@ void parse_commands(char* read, char** commands) {
     #endif
 
     token = strtok(read, separator); // first token
-    
-    while( token != NULL ) {
-        printf( " %s\n", token);
+    int i = 0;
+    while(token != NULL) {
+        #ifdef VERBOSE
+        printf("%s\n", token);
+        #endif
+        commands[i] = token;
         token = strtok(NULL, separator);
+        i++;
     }
 }
