@@ -174,7 +174,7 @@ void parse_commands(char* read, char** commands) {
     int i = 0;
     while(token != NULL) {
         #ifdef VERBOSE
-        printf("%s\n", token);
+        printf("Command %d: %s\n", i+1, token);
         #endif
         commands[i] = token;
         token = strtok(NULL, separator);
