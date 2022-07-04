@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
                     printf("New connection from %s\n", address_buffer);
 
                 } else {
-                    char read[MAX_RECEIVE]; // Buffer to read in to
+                    char read[MAX_RECEIVE] = {0}; // Buffer to read in to
                     int bytes_received = recv(i, read, MAX_RECEIVE, 0); // receieve MAX_RECEIVE bytes
                     
                     #ifdef VERBOSE
@@ -118,6 +118,8 @@ int main(int argc, char *argv[]) {
                         read[j] = toupper(read[j]);
                     }
                     send(i, read, bytes_received, 0);
+                    
+                    free(commands);
                 }
 
             } //if FD_ISSET
