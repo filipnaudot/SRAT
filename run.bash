@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [ $1 == "debug" ]; then
+if [ $1 == "v" ]; then
     echo running DEBUG mode
-    gcc -DDEBUG remote.c -o remote && ./remote
+    gcc -DVERBOSE remote.c -o remote && ./remote
 elif [ $1 == "clean" ]; then
     echo cleaning...
     rm ./remote

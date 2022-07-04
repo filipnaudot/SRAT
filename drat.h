@@ -25,4 +25,4 @@
 typedef struct addrinfo addrinfo;
 
 int num_commands(char* read, int bytes_received);
-void parse_commands(char* read, int bytes_received, char** commands);
+void parse_commands(char* read, char** commands);

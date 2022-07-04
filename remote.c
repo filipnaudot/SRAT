@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
                     char read[MAX_RECEIVE]; // Buffer to read in to
                     int bytes_received = recv(i, read, MAX_RECEIVE, 0); // receieve MAX_RECEIVE bytes
                     
-                    #ifdef DEBUG
+                    #ifdef VERBOSE
                     printf("Recieved %d bytes\n", bytes_received);
                     #endif
 
@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
                         continue;
                     }
                     
-                    #ifdef DEBUG
+                    #ifdef VERBOSE
                     for (int i = 0; i < bytes_received; i++) {
                         printf("%c", read[i]);
                     }
@@ -112,7 +112,7 @@ int main(int argc, char *argv[]) {
 
                     char** commands = malloc(num_commands(read, bytes_received) * sizeof(char*));
 
-                    parse_commands(read, bytes_received, commands);
+                    parse_commands(read, commands);
 
                     for (int j = 0; j < bytes_received; ++j) {
                         read[j] = toupper(read[j]);
@@ -149,12 +149,14 @@ int num_commands(char* read, int bytes_received) {
 
 
 
-void parse_commands(char* read, int bytes_received, char** commands) {
+void parse_commands(char* read, char** commands) {
     const char separator[2] = " ";
     char *token;
     
+    #ifdef VERBOSE
     printf("Parsing commands...\n");
-    
+    #endif
+
     token = strtok(read, separator); // first token
     
     while( token != NULL ) {
