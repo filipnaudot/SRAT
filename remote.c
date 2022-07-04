@@ -107,7 +107,7 @@ int main(int argc, char *argv[]) {
                     for (int i = 0; i < bytes_received; i++) {
                         printf("%c", read[i]);
                     }
-                    printf("Number of commands: %d\n", num_commands(read, bytes_received));
+                    printf("\nNumber of commands: %d\n", num_commands(read, bytes_received));
                     #endif
 
                     char** commands = malloc(num_commands(read, bytes_received) * sizeof(char*));
