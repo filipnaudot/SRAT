@@ -1,3 +1,4 @@
+// gcc local.c -o local && ./local  178.62.198.171 8080
 /**
  * @file local.c
  * @author Filip Naudot
