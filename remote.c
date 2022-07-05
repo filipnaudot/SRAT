@@ -92,19 +92,21 @@ int main(int argc, char *argv[]) {
                 } else {
                     char read[MAX_RECEIVE] = {0}; // Buffer to read in to (NOTE: move this out of loop?)
                     int bytes_received = recv(i, read, MAX_RECEIVE, 0); // receieve MAX_RECEIVE bytes
-                    read[bytes_received - 1] = '\0'; // remove traling new line char
-
-                    #ifdef VERBOSE
-                    printf("Recieved %d bytes\n", bytes_received);
-                    #endif
+                    // remove traling new line char
+                    if (read[bytes_received - 1] == '\n') read[bytes_received - 1] = '\0';
 
                     if (bytes_received < 1) {
+                        #ifdef VERBOSE
+                        printf("Connection closed\n");
+                        #endif
                         FD_CLR(i, &master);
                         CLOSESOCKET(i);
                         continue;
                     }
                     
                     #ifdef VERBOSE
+                    printf("Recieved %d bytes\n", bytes_received);
+
                     for (int i = 0; i < bytes_received; i++) {
                         printf("%c", read[i]);
                     }
