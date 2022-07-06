@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
                     printf("New connection from %s\n", address_buffer);
 
                 } else {
-                    char read[MAX_RECEIVE] = {0}; // Buffer to read in to (NOTE: move this out of loop?)
+                    char read[MAX_RECEIVE] = {0}; // Buffer to read in to
                     int bytes_received = recv(i, read, MAX_RECEIVE, 0); // receieve MAX_RECEIVE bytes
                     // remove traling new line char
                     if (read[bytes_received - 1] == '\n') read[bytes_received - 1] = '\0';
