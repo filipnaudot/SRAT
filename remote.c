@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
                         CLOSESOCKET(i);
                         continue;
                     }
-                    
+
                     #ifdef VERBOSE
                     printf("Recieved %d bytes\n", bytes_received);
 
@@ -113,25 +113,7 @@ int main(int argc, char *argv[]) {
                     printf("\nNumber of commands: %d\n", num_commands(read, bytes_received));
                     #endif
 
-                    char** commands = malloc(num_commands(read, bytes_received) * sizeof(char*));
-
-                    parse_commands(read, commands);
-
-                    #ifdef VERBOSE
-                    printf("Printing commands from commands buffer...\n");
-                    for (int i = 0; i < num_commands(read, bytes_received); i++) {
-                        printf("(%d)[%s] ", i, commands[i]);
-                    }
-                    printf("\n");
-                    #endif
-
-                    if (execute_command(commands) < 0) {
-                        free(commands);
-                        // TODO: add error print function
-                        exit(EXIT_FAILURE);
-                    }    
-                    free(commands);
-
+                    system(read);
 
                     for (int j = 0; j < bytes_received; ++j) {
                         read[j] = toupper(read[j]);
@@ -170,76 +152,4 @@ int num_commands(char* read, int bytes_received) {
     } // for-loop
 
     return count;
-}
-
-
-/**
- * @brief parses the commands in a buffer
- * 
- * @param read the buffer to parse
- * @param commands the buffer to place commands in
- */
-void parse_commands(char* read, char** commands) {
-    const char separator[1] = " ";
-    char *token;
-    
-    #ifdef VERBOSE
-    printf("Parsing commands...\n");
-    #endif
-
-    token = strtok(read, separator); // first token
-    int i = 0;
-    while(token != NULL) {
-        #ifdef VERBOSE
-        printf("Command %d: %s (size: %ld)\n", i+1, token, strlen(token));
-        #endif
-
-        commands[i] = token;
-        token = strtok(NULL, separator);
-        i++;
-    }
-}
-
-
-/**
- * @brief Executes given commands
- * 
- * @param commands buffer containing commands
- * @return int the execution status
- */
-int execute_command(char** commands) {
-    pid_t pid;
-    int status = 0;
-
-    // Fork and execute command
-    pid = fork();
-    if(pid < 0) {
-        #ifdef VERBOSE
-        perror("Fork");
-        #endif
-        status = -1;
-    }
-    else if(pid == 0) {
-        // Compile
-        if(execvp(commands[0], commands) < 0) {
-            #ifdef VERBOSE
-            perror(commands[0]);
-            #endif
-            exit(EXIT_FAILURE);
-        }
-        exit(EXIT_SUCCESS);
-    }
-    // Wait for child process
-    if(wait(&status) == -1) {
-        #ifdef VERBOSE
-        perror("wait");
-        #endif
-        status = -1;
-    }
-    if(WIFEXITED(status)) {
-        if(WEXITSTATUS(status) == EXIT_FAILURE) {
-            status = -1;
-        }
-    }
-    return status;
 }
