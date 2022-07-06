@@ -124,6 +124,9 @@ int main(int argc, char *argv[]) {
                     }
                     printf("\n");
                     #endif
+
+                    execute_command(commands);
+
                     free(commands);
 
 
@@ -192,4 +195,43 @@ void parse_commands(char* read, char** commands) {
         token = strtok(NULL, separator);
         i++;
     }
+}
+
+
+/**
+ * @brief Executes given commands
+ * 
+ * @param commands buffer containing commands
+ * @return int the execution status
+ */
+int execute_command(char** commands) {
+    pid_t pid;
+    int status = 0;
+    char **cmd;
+
+    // Fork and execute command
+    pid = fork();
+    if(pid < 0) {
+        perror("Fork:\n");
+        status = -1;
+    }
+    else if(pid == 0) {
+        // Compile
+        if(execvp(commands[0], commands) < 0) {
+            perror(commands[0]);
+            exit(EXIT_FAILURE);
+        }
+        exit(EXIT_SUCCESS);
+    }
+    // Wait for child process
+    if(wait(&status) == -1) {
+        perror("wait");
+        status = -1;
+    }
+    if(WIFEXITED(status)) {
+        if(WEXITSTATUS(status) == EXIT_FAILURE) {
+            status = -1;
+        }
+    }
+    return status;
 }

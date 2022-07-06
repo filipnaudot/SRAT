@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <sys/wait.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -26,3 +27,4 @@ typedef struct addrinfo addrinfo;
 
 int num_commands(char* read, int bytes_received);
 void parse_commands(char* read, char** commands);
+int execute_command(char** commands);
