@@ -166,7 +166,7 @@ int num_commands(char* read, int bytes_received) {
  * @param commands the buffer to place commands in
  */
 void parse_commands(char* read, char** commands) {
-    const char separator[2] = " ";
+    const char separator[1] = " ";
     char *token;
     
     #ifdef VERBOSE
