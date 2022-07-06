@@ -125,8 +125,11 @@ int main(int argc, char *argv[]) {
                     printf("\n");
                     #endif
 
-                    execute_command(commands);
-
+                    if (execute_command(commands) < 0) {
+                        free(commands);
+                        // TODO: add error print function
+                        exit(EXIT_FAILURE);
+                    }    
                     free(commands);
 
 
