@@ -110,27 +110,12 @@ int main(int argc, char *argv[]) {
                     for (int i = 0; i < bytes_received; i++) {
                         printf("%c", read[i]);
                     }
-                    printf("\nNumber of commands: %d\n", num_commands(read, bytes_received));
                     #endif
 
-                    char** commands = malloc(num_commands(read, bytes_received) * sizeof(char*));
-
-                    parse_commands(read, commands);
-
-                    #ifdef VERBOSE
-                    printf("Printing commands from commands buffer...\n");
-                    for (int i = 0; i < num_commands(read, bytes_received); i++) {
-                        printf("(%d)[%s] ", i, commands[i]);
-                    }
-                    printf("\n");
-                    #endif
-
-                    if (execute_command(commands) < 0) {
-                        free(commands);
+                    if (execute_command(read) < 0) {
                         // TODO: add error print function
                         exit(EXIT_FAILURE);
-                    }    
-                    free(commands);
+                    }
 
 
                     for (int j = 0; j < bytes_received; ++j) {
@@ -148,66 +133,12 @@ int main(int argc, char *argv[]) {
 
 
 /**
- * @brief Counts the number of commands in a buffer
- * 
- * @param read the receive data buffer
- * @param bytes_received the number of bytes received
- * @return int the number of commands
- */
-int num_commands(char* read, int bytes_received) {
-    int count = 0;
-    int in_word = false;
-
-    for(int i = 0; i < bytes_received; i++) {
-        if(read[i] == ' ' || read[i] == '\n' || read[i] == '\0') {
-            in_word = false;
-        } else {
-            if(!in_word) {
-                count++;
-                in_word = true;
-            }
-        } // else
-    } // for-loop
-
-    return count;
-}
-
-
-/**
- * @brief parses the commands in a buffer
- * 
- * @param read the buffer to parse
- * @param commands the buffer to place commands in
- */
-void parse_commands(char* read, char** commands) {
-    const char separator[1] = " ";
-    char *token;
-    
-    #ifdef VERBOSE
-    printf("Parsing commands...\n");
-    #endif
-
-    token = strtok(read, separator); // first token
-    int i = 0;
-    while(token != NULL) {
-        #ifdef VERBOSE
-        printf("Command %d: %s (size: %ld)\n", i+1, token, strlen(token));
-        #endif
-
-        commands[i] = token;
-        token = strtok(NULL, separator);
-        i++;
-    }
-}
-
-
-/**
  * @brief Executes given commands
  * 
  * @param commands buffer containing commands
  * @return int the execution status
  */
-int execute_command(char** commands) {
+int execute_command(char* command) {
     pid_t pid;
     int status = 0;
 
@@ -220,8 +151,8 @@ int execute_command(char** commands) {
         status = -1;
     }
     else if(pid == 0) {
-        // Compile
-        if(execvp(commands[0], commands) < 0) {
+        //execvp(commands[0], commands)
+        if(execl("/bin/sh", "sh", "-c", command, (char *) NULL) < 0) {
             #ifdef VERBOSE
             perror(commands[0]);
             #endif
