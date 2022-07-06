@@ -117,12 +117,20 @@ int main(int argc, char *argv[]) {
 
                     parse_commands(read, commands);
 
+                    #ifdef VERBOSE
+                    printf("Printing commands from commands buffer...\n");
+                    for (int i = 0; i < num_commands(read, bytes_received); i++) {
+                        printf("(%d)[%s] ", i, commands[i]);
+                    }
+                    printf("\n");
+                    #endif
+                    free(commands);
+
+
                     for (int j = 0; j < bytes_received; ++j) {
                         read[j] = toupper(read[j]);
                     }
                     send(i, read, bytes_received, 0);
-                    
-                    free(commands);
                 }
 
             } //if FD_ISSET
