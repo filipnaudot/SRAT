@@ -210,7 +210,6 @@ void parse_commands(char* read, char** commands) {
 int execute_command(char** commands) {
     pid_t pid;
     int status = 0;
-    char **cmd;
 
     // Fork and execute command
     pid = fork();
