@@ -134,9 +134,9 @@ int main(int argc, char *argv[]) {
 
 
 /**
- * @brief Executes given commands
+ * @brief Executes given command
  * 
- * @param commands buffer containing commands
+ * @param command string containing command
  * @return int the execution status
  */
 int execute_command(char* command) {
