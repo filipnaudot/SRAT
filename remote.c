@@ -215,20 +215,26 @@ int execute_command(char** commands) {
     // Fork and execute command
     pid = fork();
     if(pid < 0) {
+        #ifdef VERBOSE
         perror("Fork:\n");
+        #endif
         status = -1;
     }
     else if(pid == 0) {
         // Compile
         if(execvp(commands[0], commands) < 0) {
+            #ifdef VERBOSE
             perror(commands[0]);
+            #endif
             exit(EXIT_FAILURE);
         }
         exit(EXIT_SUCCESS);
     }
     // Wait for child process
     if(wait(&status) == -1) {
+        #ifdef VERBOSE
         perror("wait");
+        #endif
         status = -1;
     }
     if(WIFEXITED(status)) {
