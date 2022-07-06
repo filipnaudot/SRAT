@@ -110,6 +110,7 @@ int main(int argc, char *argv[]) {
                     for (int i = 0; i < bytes_received; i++) {
                         printf("%c", read[i]);
                     }
+                    printf("\n");
                     #endif
 
                     if (execute_command(read) < 0) {
@@ -153,7 +154,7 @@ int execute_command(char* command) {
     else if(pid == 0) {
         if(execl("/bin/sh", "sh", "-c", command, (char *) NULL) < 0) {
             #ifdef VERBOSE
-            perror(commands[0]);
+            perror(command);
             #endif
             exit(EXIT_FAILURE);
         }
