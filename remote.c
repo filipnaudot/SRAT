@@ -216,7 +216,7 @@ int execute_command(char** commands) {
     pid = fork();
     if(pid < 0) {
         #ifdef VERBOSE
-        perror("Fork:\n");
+        perror("Fork");
         #endif
         status = -1;
     }
