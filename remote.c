@@ -152,7 +152,7 @@ int execute_command(char* command) {
         status = -1;
     }
     else if(pid == 0) {
-        if(execl("/bin/sh", "sh", "-c", command, (char *) NULL) < 0) {
+        if(execl("/bin/sh", "sh", "-c", command, (char*)NULL) < 0) {
             #ifdef VERBOSE
             perror(command);
             #endif
