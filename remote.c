@@ -174,6 +174,7 @@ int execute_command(char* command, char* return_buffer) {
     close(pipefd[1]);
 
     while (read(pipefd[0], return_buffer, 1024) != 0);
+    close(pipefd[0]);
 
     // Wait for child process
     if(wait(&status) == -1) {
