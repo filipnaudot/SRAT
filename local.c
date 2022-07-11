@@ -96,8 +96,7 @@ int main(int argc, char *argv[]) {
                 printf("Connection closed by peer.\n");
                 break;
             }
-            printf("Received (%d bytes): %.*s",
-                    bytes_received, bytes_received, read);
+            printf("Received (%d bytes): %s", bytes_received, read);
         }
 
 #if defined(_WIN32)
