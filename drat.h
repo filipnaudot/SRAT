@@ -27,4 +27,4 @@ typedef struct addrinfo addrinfo;
 
 int num_commands(char* read, int bytes_received);
 void parse_commands(char* read, char** commands);
-int execute_command(char* command);
+int execute_command(char* command, char* return_buffer);

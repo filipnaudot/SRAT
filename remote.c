@@ -112,8 +112,11 @@ int main(int argc, char *argv[]) {
                     }
                     printf("\n");
                     #endif
+                    
+                    // TODO: allocate return_buffer dynamically
+                    char return_buffer[20480] = {0}; // Buffer to write in to
 
-                    if (execute_command(read) < 0) {
+                    if (execute_command(read, return_buffer) < 0) {
                         // TODO: add error print function
                         exit(EXIT_FAILURE);
                     }
@@ -122,7 +125,7 @@ int main(int argc, char *argv[]) {
                     for (int j = 0; j < bytes_received; ++j) {
                         read[j] = toupper(read[j]);
                     }
-                    send(i, read, bytes_received, 0);
+                    send(i, return_buffer, sizeof(return_buffer), 0);
                 }
 
             } //if FD_ISSET
@@ -139,10 +142,13 @@ int main(int argc, char *argv[]) {
  * @param command string containing command
  * @return int the execution status
  */
-int execute_command(char* command) {
+int execute_command(char* command, char* return_buffer) {
     pid_t pid;
     int status = 0;
-
+    
+    int pipefd[2];
+    pipe(pipefd);
+    
     // Fork and execute command
     pid = fork();
     if(pid < 0) {
@@ -152,6 +158,11 @@ int execute_command(char* command) {
         status = -1;
     }
     else if(pid == 0) {
+        close(pipefd[0]);
+        dup2(pipefd[1], STDOUT_FILENO);  // send stdout to the pipe
+        dup2(pipefd[1], STDERR_FILENO);  // send stderr to the pipe
+        close(pipefd[1]);
+
         if(execl("/bin/sh", "sh", "-c", command, (char*)NULL) < 0) {
             #ifdef VERBOSE
             perror(command);
@@ -160,6 +171,12 @@ int execute_command(char* command) {
         }
         exit(EXIT_SUCCESS);
     }
+    close(pipefd[1]);
+
+    while (read(pipefd[0], return_buffer, 1024) != 0);
+    printf("\n");
+
+
     // Wait for child process
     if(wait(&status) == -1) {
         #ifdef VERBOSE
