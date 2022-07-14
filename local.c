@@ -10,19 +10,7 @@
 
 #include "drat.h"
 
-#if defined(_WIN32)
-#include <conio.h>
-#endif
-
 int main(int argc, char *argv[]) {
-
-#if defined(_WIN32)
-    WSADATA d;
-    if (WSAStartup(MAKEWORD(2, 2), &d)) {
-        fprintf(stderr, "Failed to initialize.\n");
-        return 1;
-    }
-#endif
 
     if (argc < 3) {
         fprintf(stderr, "usage: tcp_client hostname port\n");
@@ -76,9 +64,7 @@ int main(int argc, char *argv[]) {
         fd_set reads;
         FD_ZERO(&reads);
         FD_SET(socket_peer, &reads);
-#if !defined(_WIN32)
         FD_SET(0, &reads);
-#endif
 
         struct timeval timeout;
         timeout.tv_sec = 0;
@@ -99,11 +85,7 @@ int main(int argc, char *argv[]) {
             printf("Received (%d bytes): %s", bytes_received, read);
         }
 
-#if defined(_WIN32)
-        if(_kbhit()) {
-#else
         if(FD_ISSET(0, &reads)) {
-#endif
             char read[4096];
             if (!fgets(read, 4096, stdin)) break;
             printf("Sending: %s", read);
@@ -114,10 +96,6 @@ int main(int argc, char *argv[]) {
 
     printf("Closing socket...\n");
     CLOSESOCKET(socket_peer);
-
-#if defined(_WIN32)
-    WSACleanup();
-#endif
 
     printf("Finished.\n");
     return 0;
