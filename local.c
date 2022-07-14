@@ -17,7 +17,10 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    #ifdef VERBOSE
     printf("Configuring remote address...\n");
+    #endif
+
     struct addrinfo hints;
     memset(&hints, 0, sizeof(hints));
     hints.ai_socktype = SOCK_STREAM;
@@ -28,17 +31,25 @@ int main(int argc, char *argv[]) {
     }
 
 
+    #ifdef VERBOSE
     printf("Remote address is: ");
+    #endif
+    
     char address_buffer[100];
     char service_buffer[100];
     getnameinfo(peer_address->ai_addr, peer_address->ai_addrlen,
             address_buffer, sizeof(address_buffer),
             service_buffer, sizeof(service_buffer),
             NI_NUMERICHOST);
+    #ifdef VERBOSE
     printf("%s %s\n", address_buffer, service_buffer);
+    #endif
 
 
+    #ifdef VERBOSE
     printf("Creating socket...\n");
+    #endif
+
     SOCKET socket_peer;
     socket_peer = socket(peer_address->ai_family,
             peer_address->ai_socktype, peer_address->ai_protocol);
@@ -47,8 +58,10 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-
+    #ifdef VERBOSE
     printf("Connecting...\n");
+    #endif
+
     if (connect(socket_peer,
                 peer_address->ai_addr, peer_address->ai_addrlen)) {
         fprintf(stderr, "connect() failed. (%d)\n", GETSOCKETERRNO());
@@ -56,7 +69,9 @@ int main(int argc, char *argv[]) {
     }
     freeaddrinfo(peer_address);
 
+    #ifdef VERBOSE
     printf("Connected.\n");
+    #endif
     printf("To send data, enter text followed by enter.\n");
 
     while(1) {
@@ -82,15 +97,22 @@ int main(int argc, char *argv[]) {
                 printf("Connection closed by peer.\n");
                 break;
             }
-            printf("Received (%d bytes): %s", bytes_received, read);
+            printf("%s", read);
         }
 
         if(FD_ISSET(0, &reads)) {
             char read[4096];
             if (!fgets(read, 4096, stdin)) break;
+            
+            #ifdef VERBOSE
             printf("Sending: %s", read);
+            #endif
+            
             int bytes_sent = send(socket_peer, read, strlen(read), 0);
+
+            #ifdef VERBOSE
             printf("Sent %d bytes.\n", bytes_sent);
+            #endif
         }
     } //end while(1)
 
