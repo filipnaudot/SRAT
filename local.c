@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
     #ifdef VERBOSE
     printf("Connected.\n");
     #endif
-    printf("To send data, enter text followed by enter.\n");
+    printf("Enter command followed by enter.\n");
 
     while (1) {
 
