@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
     #endif
     printf("To send data, enter text followed by enter.\n");
 
-    while(1) {
+    while (1) {
 
         fd_set reads;
         FD_ZERO(&reads);
@@ -100,7 +100,7 @@ int main(int argc, char *argv[]) {
             printf("%s", read);
         }
 
-        if(FD_ISSET(0, &reads)) {
+        if (FD_ISSET(0, &reads)) {
             char read[4096];
             if (!fgets(read, 4096, stdin)) break;
             
