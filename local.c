@@ -72,7 +72,6 @@ int main(int argc, char *argv[]) {
     #ifdef VERBOSE
     printf("Connected.\n");
     #endif
-    printf("Enter command followed by enter.\n");
 
     while (1) {
 
