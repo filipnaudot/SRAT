@@ -111,10 +111,8 @@ int main(int argc, char *argv[]) {
             #endif
         }
     } //end while(1)
-
-    printf("Closing socket...\n");
+    
     CLOSESOCKET(socket_peer);
 
-    printf("Finished.\n");
     return 0;
 }
