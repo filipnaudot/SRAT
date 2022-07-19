@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
                 printf("Connection closed by peer.\n");
                 break;
             }
-            printf("%.*s\n", 4096, read);
+            printf("%.*s\n", bytes_received, read);
         }
 
         if (FD_ISSET(STDIN_FILENO, &reads)) {
