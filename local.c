@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
             printf("%.*s", bytes_received, read);
         }
 
-        if (FD_ISSET(0, &reads)) {
+        if (FD_ISSET(STDIN_FILENO, &reads)) {
             char read[4096];
             if (!fgets(read, 4096, stdin)) break;
             
