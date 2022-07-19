@@ -13,7 +13,9 @@
 #define PORT "8080"
 
 int main(int argc, char *argv[]) {
+    #ifdef VERBOSE
     printf("Configuring local address...\n");
+    #endif
 
     addrinfo hints;
     memset(&hints, 0, sizeof(hints));
@@ -24,27 +26,37 @@ int main(int argc, char *argv[]) {
     addrinfo *bind_address;
     getaddrinfo(0, PORT, &hints, &bind_address);
 
-
+    #ifdef VERBOSE
     printf("Creating socket...\n");
+    #endif
     SOCKET socket_listen;
     socket_listen = socket(bind_address->ai_family,
                             bind_address->ai_socktype, bind_address->ai_protocol);
     if (!ISVALIDSOCKET(socket_listen)) {
+        #ifdef VERBOSE
         fprintf(stderr, "socket() failed. (%d)\n", GETSOCKETERRNO());
+        #endif
         return 1;
     }
 
-
+    #ifdef VERBOSE
     printf("Binding socket to local address...\n");
+    #endif
     if (bind(socket_listen, bind_address->ai_addr, bind_address->ai_addrlen)) {
+        #ifdef VERBOSE
         fprintf(stderr, "bind() failed. (%d)\n", GETSOCKETERRNO());
+        #endif
         return 1;
     }
     freeaddrinfo(bind_address);
 
+    #ifdef VERBOSE
     printf("Listening...\n");
+    #endif
     if (listen(socket_listen, 10) < 0) {
+        #ifdef VERBOSE
         fprintf(stderr, "listen() failed. (%d)\n", GETSOCKETERRNO());
+        #endif
         return 1;
     }
 
@@ -53,19 +65,22 @@ int main(int argc, char *argv[]) {
     FD_SET(socket_listen, &master);
     SOCKET max_socket = socket_listen;
 
+    #ifdef VERBOSE
     printf("Waiting for connections...\n");
+    #endif
 
     while(1) {
         fd_set reads;
         reads = master;
         if (select(max_socket+1, &reads, 0, 0, 0) < 0) {
+            #ifdef VERBOSE
             fprintf(stderr, "select() failed. (%d)\n", GETSOCKETERRNO());
+            #endif
             return 1;
         }
 
         for(SOCKET i = 1; i <= max_socket; ++i) {
             if (FD_ISSET(i, &reads)) {
-
                 if (i == socket_listen) {
                     struct sockaddr_storage client_address;
                     socklen_t client_len = sizeof(client_address);
@@ -73,8 +88,9 @@ int main(int argc, char *argv[]) {
                             (struct sockaddr*) &client_address,
                             &client_len);
                     if (!ISVALIDSOCKET(socket_client)) {
-                        fprintf(stderr, "accept() failed. (%d)\n",
-                                GETSOCKETERRNO());
+                        #ifdef VERBOSE
+                        fprintf(stderr, "accept() failed. (%d)\n", GETSOCKETERRNO());
+                        #endif
                         return 1;
                     }
 
@@ -84,10 +100,16 @@ int main(int argc, char *argv[]) {
                     }
 
                     char address_buffer[100];
-                    getnameinfo((struct sockaddr*)&client_address, client_len,
-                                address_buffer, sizeof(address_buffer), 0, 0,
+                    getnameinfo((struct sockaddr*)&client_address,
+                                client_len,
+                                address_buffer,
+                                sizeof(address_buffer),
+                                0,
+                                0,
                                 NI_NUMERICHOST);
+                    #ifdef VERBOSE
                     printf("New connection from %s\n", address_buffer);
+                    #endif
 
                 } else {
                     char read[MAX_RECEIVE] = {0}; // Buffer to read in to
@@ -114,15 +136,17 @@ int main(int argc, char *argv[]) {
                     #endif
                     
                     // TODO: allocate return_buffer dynamically
-                    //20480
                     char return_buffer[4096] = {0}; // Buffer to write in to
 
                     if (execute_command(read, return_buffer) < 0) {
                         // TODO: add error print function
                         exit(EXIT_FAILURE);
                     }
-                    
-                    send(i, return_buffer, sizeof(return_buffer), 0);
+
+                    int bytes_sent = send(i, return_buffer, sizeof(return_buffer), 0);
+                    #ifdef VERBOSE
+                    printf("Bytes sent: %d [sizeof(return_buffer): %lu]\n", bytes_sent, sizeof(return_buffer));
+                    #endif
                 }
 
             } //if FD_ISSET
