@@ -87,9 +87,9 @@ int main(int argc, char *argv[]) {
             return 1;
         }
 
-        char read[4096] = {0};
+        char read[STANDARD_BUFFER_SIZE] = {0};
         if (FD_ISSET(socket_peer, &reads)) {
-            int bytes_received = recv(socket_peer, read, 4096, 0);
+            int bytes_received = recv(socket_peer, read, STANDARD_BUFFER_SIZE, 0);
             if (bytes_received < 1) {
                 printf("Connection closed by peer.\n");
                 break;
@@ -98,7 +98,7 @@ int main(int argc, char *argv[]) {
         }
 
         if (FD_ISSET(STDIN_FILENO, &reads)) {
-            if (!fgets(read, 4096, stdin)) break;
+            if (!fgets(read, STANDARD_BUFFER_SIZE, stdin)) break;
             
             #ifdef VERBOSE
             printf("Sending: %s", read);

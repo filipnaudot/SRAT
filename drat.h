@@ -18,6 +18,7 @@
 
 
 #define MAX_RECEIVE 1024
+#define STANDARD_BUFFER_SIZE 4096
 
 #define true 1
 #define false 0

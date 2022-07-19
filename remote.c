@@ -136,7 +136,7 @@ int main(int argc, char *argv[]) {
                     #endif
                     
                     // TODO: allocate return_buffer dynamically
-                    char return_buffer[4096] = {0}; // Buffer to write in to
+                    char return_buffer[STANDARD_BUFFER_SIZE] = {0}; // Buffer to write in to
 
                     if (execute_command(read, return_buffer) < 0) {
                         // TODO: add error print function
@@ -194,10 +194,7 @@ int execute_command(char* command, char* return_buffer) {
     }
     close(pipefd[1]);
 
-    while (read(pipefd[0], return_buffer, 2048) != 0);
-
-    printf("Buffer:\n%s", return_buffer);
-
+    while (read(pipefd[0], return_buffer, STANDARD_BUFFER_SIZE) != 0);
 
     close(pipefd[0]);
 
