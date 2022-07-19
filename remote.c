@@ -194,7 +194,11 @@ int execute_command(char* command, char* return_buffer) {
     }
     close(pipefd[1]);
 
-    while (read(pipefd[0], return_buffer, 1024) != 0);
+    while (read(pipefd[0], return_buffer, 2048) != 0);
+
+    printf("Buffer:\n%s", return_buffer);
+
+
     close(pipefd[0]);
 
     // Wait for child process
