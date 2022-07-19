@@ -96,7 +96,19 @@ int main(int argc, char *argv[]) {
             }
             printf("%.*s\n", bytes_received, read);
         }
+        printf("> ");
+        gets(read);    
+        #ifdef VERBOSE
+        printf("Sending: %s", read);
+        #endif
+        
+        int bytes_sent = send(socket_peer, read, strlen(read), 0);
 
+        #ifdef VERBOSE
+        printf("Sent %d bytes.\n", bytes_sent);
+        #endif
+
+        /*
         if (FD_ISSET(STDIN_FILENO, &reads)) {
             if (!fgets(read, STANDARD_BUFFER_SIZE, stdin)) break;
             
@@ -110,6 +122,7 @@ int main(int argc, char *argv[]) {
             printf("Sent %d bytes.\n", bytes_sent);
             #endif
         }
+        */
     } //end while(1)
     
     CLOSESOCKET(socket_peer);
