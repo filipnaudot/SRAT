@@ -62,8 +62,7 @@ int main(int argc, char *argv[]) {
     printf("Connecting...\n");
     #endif
 
-    if (connect(socket_peer,
-                peer_address->ai_addr, peer_address->ai_addrlen)) {
+    if (connect(socket_peer, peer_address->ai_addr, peer_address->ai_addrlen)) {
         fprintf(stderr, "connect() failed. (%d)\n", GETSOCKETERRNO());
         return 1;
     }
@@ -74,11 +73,10 @@ int main(int argc, char *argv[]) {
     #endif
 
     while (1) {
-
         fd_set reads;
         FD_ZERO(&reads);
         FD_SET(socket_peer, &reads);
-        FD_SET(0, &reads);
+        FD_SET(STDIN_FILENO, &reads);
 
         struct timeval timeout;
         timeout.tv_sec = 0;
