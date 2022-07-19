@@ -87,18 +87,17 @@ int main(int argc, char *argv[]) {
             return 1;
         }
 
+        char read[4096] = {0};
         if (FD_ISSET(socket_peer, &reads)) {
-            char read[4096];
             int bytes_received = recv(socket_peer, read, 4096, 0);
             if (bytes_received < 1) {
                 printf("Connection closed by peer.\n");
                 break;
             }
-            printf("%.*s", bytes_received, read);
+            printf("%.*s\n", 4096, read);
         }
 
         if (FD_ISSET(STDIN_FILENO, &reads)) {
-            char read[4096];
             if (!fgets(read, 4096, stdin)) break;
             
             #ifdef VERBOSE
