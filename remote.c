@@ -114,17 +114,14 @@ int main(int argc, char *argv[]) {
                     #endif
                     
                     // TODO: allocate return_buffer dynamically
-                    char return_buffer[20480] = {0}; // Buffer to write in to
+                    //20480
+                    char return_buffer[4096] = {0}; // Buffer to write in to
 
                     if (execute_command(read, return_buffer) < 0) {
                         // TODO: add error print function
                         exit(EXIT_FAILURE);
                     }
-
-
-                    for (int j = 0; j < bytes_received; ++j) {
-                        read[j] = toupper(read[j]);
-                    }
+                    
                     send(i, return_buffer, sizeof(return_buffer), 0);
                 }
 
