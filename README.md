@@ -4,6 +4,3 @@ DRAT is a simple remote acces tool capable of remote command execution aswell as
 ## Requirements
 - [X] Execute commads remotely
 - [ ] Download and upload files
-
-## TODO
-- create separate h-files for local and remote
