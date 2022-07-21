@@ -114,6 +114,7 @@ int main(int argc, char *argv[]) {
 
                 } else {
                     data_packet data;
+                    // TODO: Receive each member of struct separately
                     int bytes_received = recv(i, data.read, MAX_RECEIVE, 0); // receieve MAX_RECEIVE bytes
                     // remove traling new line char
                     if (data.read[bytes_received - 1] == '\n') data.read[bytes_received - 1] = '\0';
