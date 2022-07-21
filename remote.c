@@ -122,7 +122,7 @@ int main(int argc, char *argv[]) {
                         printf("Connection closed\n");
                         #endif
                         FD_CLR(i, &master);
-                        CLOSESOCKET(i);
+                        close(i);
                         continue;
                     }
                     
