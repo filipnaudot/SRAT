@@ -113,7 +113,8 @@ int main(int argc, char *argv[]) {
             if (strncmp("get ", data.read, 4) == 0) {
                 printf("START FILE TRANSFER\n");
             }
-            int bytes_sent = send(socket_peer, data.read, strlen(data.read), 0);
+            // TODO: Send each member of struct separately
+            int bytes_sent = send(socket_peer, data.read, strlen(data.read), 0); 
             #ifdef VERBOSE
             printf("Sent %d bytes.\n", bytes_sent);
             #endif
