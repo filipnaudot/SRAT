@@ -137,16 +137,16 @@ int main(int argc, char *argv[]) {
                     #endif
                     
                     // TODO: allocate return_buffer dynamically
-                    char return_buffer[STANDARD_BUFFER_SIZE] = {0}; // Buffer to write in to
+                    char return_buffer[STANDARD_BUFFER_SIZE] = {'\0'}; // Buffer to write in to
 
                     if (execute_command(data.read, return_buffer) < 0) {
                         // TODO: add error print function
                         exit(EXIT_FAILURE);
                     }
 
-                    int bytes_sent = send(i, return_buffer, sizeof(return_buffer), 0);
+                    int bytes_sent = send(i, return_buffer, strlen(return_buffer), 0);
                     #ifdef VERBOSE
-                    printf("Bytes sent: %d [sizeof(return_buffer): %lu]\n", bytes_sent, sizeof(return_buffer));
+                    printf("Bytes sent: %d [strlen(return_buffer): %lu]\n", bytes_sent, strlen(return_buffer));
                     #endif
                 }
 
