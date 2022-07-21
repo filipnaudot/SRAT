@@ -14,7 +14,6 @@
 #define ISVALIDSOCKET(s) ((s) >= 0)
 #define CLOSESOCKET(s) close(s)
 #define SOCKET int
-#define GETSOCKETERRNO() (errno)
 
 
 #define MAX_RECEIVE 1024

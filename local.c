@@ -11,7 +11,6 @@
 #include "drat.h"
 
 int main(int argc, char *argv[]) {
-
     if (argc < 3) {
         fprintf(stderr, "usage: tcp_client hostname port\n");
         return 1;
@@ -24,12 +23,12 @@ int main(int argc, char *argv[]) {
     struct addrinfo hints;
     memset(&hints, 0, sizeof(hints));
     hints.ai_socktype = SOCK_STREAM;
+
     struct addrinfo *peer_address;
     if (getaddrinfo(argv[1], argv[2], &hints, &peer_address)) {
-        fprintf(stderr, "getaddrinfo() failed. (%d)\n", GETSOCKETERRNO());
+        perror("getaddrinfo");
         return 1;
     }
-
 
     #ifdef VERBOSE
     printf("Remote address is: ");
@@ -37,10 +36,13 @@ int main(int argc, char *argv[]) {
     
     char address_buffer[100];
     char service_buffer[100];
-    getnameinfo(peer_address->ai_addr, peer_address->ai_addrlen,
-            address_buffer, sizeof(address_buffer),
-            service_buffer, sizeof(service_buffer),
-            NI_NUMERICHOST);
+    getnameinfo(peer_address->ai_addr,
+                peer_address->ai_addrlen,
+                address_buffer,
+                sizeof(address_buffer),
+                service_buffer,
+                sizeof(service_buffer),
+                NI_NUMERICHOST);
     #ifdef VERBOSE
     printf("%s %s\n", address_buffer, service_buffer);
     #endif
@@ -52,9 +54,10 @@ int main(int argc, char *argv[]) {
 
     SOCKET socket_peer;
     socket_peer = socket(peer_address->ai_family,
-            peer_address->ai_socktype, peer_address->ai_protocol);
+                        peer_address->ai_socktype,
+                        peer_address->ai_protocol);
     if (!ISVALIDSOCKET(socket_peer)) {
-        fprintf(stderr, "socket() failed. (%d)\n", GETSOCKETERRNO());
+        perror("socket");
         return 1;
     }
 
@@ -63,7 +66,7 @@ int main(int argc, char *argv[]) {
     #endif
 
     if (connect(socket_peer, peer_address->ai_addr, peer_address->ai_addrlen)) {
-        fprintf(stderr, "connect() failed. (%d)\n", GETSOCKETERRNO());
+        perror("connect");
         return 1;
     }
     freeaddrinfo(peer_address);
@@ -83,7 +86,7 @@ int main(int argc, char *argv[]) {
         timeout.tv_usec = 100000;
 
         if (select(socket_peer+1, &reads, 0, 0, &timeout) < 0) {
-            fprintf(stderr, "select() failed. (%d)\n", GETSOCKETERRNO());
+            perror("select");
             return 1;
         }
 
