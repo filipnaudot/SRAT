@@ -112,7 +112,7 @@ int main(int argc, char *argv[]) {
         #endif
     } //end while(1)
     
-    CLOSESOCKET(socket_peer);
+    close(socket_peer);
 
     return 0;
 }
