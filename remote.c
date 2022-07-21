@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
                             bind_address->ai_socktype, bind_address->ai_protocol);
     if (!ISVALIDSOCKET(socket_listen)) {
         #ifdef VERBOSE
-        fprintf(stderr, "socket() failed. (%d)\n", GETSOCKETERRNO());
+        perror("socket");
         #endif
         return 1;
     }
@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
     #endif
     if (bind(socket_listen, bind_address->ai_addr, bind_address->ai_addrlen)) {
         #ifdef VERBOSE
-        fprintf(stderr, "bind() failed. (%d)\n", GETSOCKETERRNO());
+        perror("bind");
         #endif
         return 1;
     }
@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
     #endif
     if (listen(socket_listen, 10) < 0) {
         #ifdef VERBOSE
-        fprintf(stderr, "listen() failed. (%d)\n", GETSOCKETERRNO());
+        perror("listen");
         #endif
         return 1;
     }
@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
         reads = master;
         if (select(max_socket+1, &reads, 0, 0, 0) < 0) {
             #ifdef VERBOSE
-            fprintf(stderr, "select() failed. (%d)\n", GETSOCKETERRNO());
+            perror("select");
             #endif
             return 1;
         }
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
                             &client_len);
                     if (!ISVALIDSOCKET(socket_client)) {
                         #ifdef VERBOSE
-                        fprintf(stderr, "accept() failed. (%d)\n", GETSOCKETERRNO());
+                        perror("accept");
                         #endif
                         return 1;
                     }
