@@ -113,10 +113,10 @@ int main(int argc, char *argv[]) {
                     #endif
 
                 } else {
-                    char read[MAX_RECEIVE] = {0}; // Buffer to read in to
-                    int bytes_received = recv(i, read, MAX_RECEIVE, 0); // receieve MAX_RECEIVE bytes
+                    data_packet data;
+                    int bytes_received = recv(i, data.read, MAX_RECEIVE, 0); // receieve MAX_RECEIVE bytes
                     // remove traling new line char
-                    if (read[bytes_received - 1] == '\n') read[bytes_received - 1] = '\0';
+                    if (data.read[bytes_received - 1] == '\n') data.read[bytes_received - 1] = '\0';
 
                     if (bytes_received < 1) {
                         #ifdef VERBOSE
@@ -131,7 +131,7 @@ int main(int argc, char *argv[]) {
                     printf("Recieved %d bytes\n", bytes_received);
 
                     for (int i = 0; i < bytes_received; i++) {
-                        printf("%c", read[i]);
+                        printf("%c", data.read[i]);
                     }
                     printf("\n");
                     #endif
@@ -139,7 +139,7 @@ int main(int argc, char *argv[]) {
                     // TODO: allocate return_buffer dynamically
                     char return_buffer[STANDARD_BUFFER_SIZE] = {0}; // Buffer to write in to
 
-                    if (execute_command(read, return_buffer) < 0) {
+                    if (execute_command(data.read, return_buffer) < 0) {
                         // TODO: add error print function
                         exit(EXIT_FAILURE);
                     }
