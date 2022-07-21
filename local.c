@@ -90,27 +90,31 @@ int main(int argc, char *argv[]) {
             return 1;
         }
 
-        char read[STANDARD_BUFFER_SIZE] = {0};
+        //char read[STANDARD_BUFFER_SIZE] = {0};
+        data_packet data;
+        data.is_get = false;
+        memset(&data.read, 0, sizeof(data.read));
+
         if (FD_ISSET(socket_peer, &reads)) {
-            int bytes_received = recv(socket_peer, read, STANDARD_BUFFER_SIZE, 0);
+            int bytes_received = recv(socket_peer, data.read, STANDARD_BUFFER_SIZE, 0);
             if (bytes_received < 1) {
                 printf("Connection closed by peer.\n");
                 break;
             }
-            printf("%.*s\n", bytes_received, read);
+            printf("%.*s\n", bytes_received, data.read);
         }
 
         if (FD_ISSET(STDIN_FILENO, &reads)) {
-            if (!fgets(read, STANDARD_BUFFER_SIZE, stdin)) break;
+            if (!fgets(data.read, STANDARD_BUFFER_SIZE, stdin)) break;
             
             #ifdef VERBOSE
-            printf("Sending: %s", read);
+            printf("Sending: %s", data.read);
             #endif
 
-            if (strncmp("get ", read, 4) == 0) {
+            if (strncmp("get ", data.read, 4) == 0) {
                 printf("START FILE TRANSFER\n");
             }
-            int bytes_sent = send(socket_peer, read, strlen(read), 0);
+            int bytes_sent = send(socket_peer, data.read, strlen(data.read), 0);
             #ifdef VERBOSE
             printf("Sent %d bytes.\n", bytes_sent);
             #endif

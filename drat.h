@@ -22,6 +22,12 @@
 #define false 0
 
 
+typedef struct data_packet {
+    int is_get;
+    char read[STANDARD_BUFFER_SIZE];
+} data_packet;
+
+
 typedef struct addrinfo addrinfo;
 
 int num_commands(char* read, int bytes_received);
