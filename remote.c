@@ -31,7 +31,8 @@ int main(int argc, char *argv[]) {
     #endif
     SOCKET socket_listen;
     socket_listen = socket(bind_address->ai_family,
-                            bind_address->ai_socktype, bind_address->ai_protocol);
+                            bind_address->ai_socktype,
+                            bind_address->ai_protocol);
     if (!ISVALIDSOCKET(socket_listen)) {
         #ifdef VERBOSE
         perror("socket");
