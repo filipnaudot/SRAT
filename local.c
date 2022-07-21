@@ -90,7 +90,6 @@ int main(int argc, char *argv[]) {
             return 1;
         }
 
-        //char read[STANDARD_BUFFER_SIZE] = {0};
         data_packet data;
         data.is_get = false;
         memset(&data.read, 0, sizeof(data.read));
