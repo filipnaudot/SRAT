@@ -106,7 +106,10 @@ int main(int argc, char *argv[]) {
             #ifdef VERBOSE
             printf("Sending: %s", read);
             #endif
-            
+
+            if (strncmp("get ", read, 4) == 0) {
+                printf("START FILE TRANSFER\n");
+            }
             int bytes_sent = send(socket_peer, read, strlen(read), 0);
             #ifdef VERBOSE
             printf("Sent %d bytes.\n", bytes_sent);
