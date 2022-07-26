@@ -142,10 +142,13 @@ int main(int argc, char *argv[]) {
                     char return_buffer[STANDARD_BUFFER_SIZE] = {'\0'}; // Buffer to write in to
 
                     if (data.is_get) {
-                        printf("START FILE TRANSFER\n");
-                        printf("Opening [%s]\n", data.read);
                         FILE* fp = fopen(data.read, "r");
-                        send_file(fp, i);
+
+                        fseek(fp, 0L, SEEK_END);
+                        long file_size = ftell(fp);
+                        fseek(fp, 0L, SEEK_SET);
+
+                        send_file(fp, i, file_size);
                     } else {
                         if (execute_command(data.read, return_buffer) < 0) {
                         // TODO: add error print function
@@ -225,20 +228,20 @@ int execute_command(char* command, char* return_buffer) {
 }
 
 
-void send_file(FILE *fp, int sockfd) {
+void send_file(FILE *fp, int sockfd, long file_size) {
     int n;
     char data[1024] = {0};
-    
-    printf("SENDING FILE...\n");
+
+    if (send(sockfd, &file_size, sizeof(long), 0) < 0) {
+        perror("send");
+        exit(1);
+    }
+
     while (fgets(data, 1024, fp) != NULL) {
-        printf("SENDING: [%s]\n", data);
         if (send(sockfd, data, strlen(data), 0) < 0) {
             perror("send");
             exit(1);
         }
         bzero(data, 1024);
     }
-    close(sockfd);
-    
-    printf("FILE SENT\n");
 }
