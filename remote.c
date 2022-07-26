@@ -114,7 +114,8 @@ int main(int argc, char *argv[]) {
 
                 } else {
                     data_packet data;
-                    // TODO: Receive each member of struct separately
+
+                    recv(i, &data.is_get, sizeof(int), 0);
                     int bytes_received = recv(i, data.read, MAX_RECEIVE, 0); // receieve MAX_RECEIVE bytes
                     // remove traling new line char
                     if (data.read[bytes_received - 1] == '\n') data.read[bytes_received - 1] = '\0';
@@ -140,9 +141,13 @@ int main(int argc, char *argv[]) {
                     // TODO: allocate return_buffer dynamically
                     char return_buffer[STANDARD_BUFFER_SIZE] = {'\0'}; // Buffer to write in to
 
-                    if (execute_command(data.read, return_buffer) < 0) {
+                    if (data.is_get) {
+                        printf("START FILE TRANSFER\n");
+                    } else {
+                        if (execute_command(data.read, return_buffer) < 0) {
                         // TODO: add error print function
                         exit(EXIT_FAILURE);
+                    }
                     }
 
                     int bytes_sent = send(i, return_buffer, strlen(return_buffer), 0);
