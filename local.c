@@ -111,7 +111,6 @@ int main(int argc, char *argv[]) {
             #endif
 
             if (strncmp("get ", data.read, 4) == 0) {
-                printf("START FILE TRANSFER\n");
                 data.is_get = true;
                 int i;
                 for (i =  0; i < strlen(data.read) - 4; i++) {
@@ -144,14 +143,15 @@ void write_file(int socket_peer) {
     FILE *fp;
     char *filename = "recv.txt";
     char buffer[1024];
-    
-    printf("RECIEVING FILE...\n");
-    fp = fopen(filename, "w");
-    
-    int i = 0;
-    while (1) {
-        printf("%d\n", i++);
+    long file_size = 0;
+    long total_bytes_recieved = 0;
 
+    fp = fopen(filename, "w");
+
+    recv(socket_peer, &file_size, sizeof(long), 0);
+
+    int i = 0;
+    do {
         fd_set reads;
         FD_ZERO(&reads);
         FD_SET(socket_peer, &reads);
@@ -168,16 +168,17 @@ void write_file(int socket_peer) {
 
         if (FD_ISSET(socket_peer, &reads)) {
             int n = recv(socket_peer, buffer, 1024, 0);
-            if (n < 1) {
-                break;
-            }
-            printf("Recieved %d bytes\n", n);
-            printf("RECEIVED: [%s]\n", buffer);
+            total_bytes_recieved += n;
         
             fprintf(fp, "%s", buffer);
             bzero(buffer, 1024);
         }
-    }
+        /*
+        if (total_bytes_recieved == file_size) {
+            break;
+        }
+        */
+    } while(total_bytes_recieved < file_size);
+
     fclose(fp);
-    printf("FILE RECIEVED\n");
 }
