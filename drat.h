@@ -32,3 +32,7 @@ typedef struct addrinfo addrinfo;
 
 void parse_commands(char* read, char** commands);
 int execute_command(char* command, char* return_buffer);
+
+
+void write_file(int socket_peer);
+void send_file(FILE *fp, int sockfd);

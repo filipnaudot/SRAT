@@ -143,14 +143,18 @@ int main(int argc, char *argv[]) {
 
                     if (data.is_get) {
                         printf("START FILE TRANSFER\n");
+                        printf("Opening [%s]\n", data.read);
+                        FILE* fp = fopen(data.read, "r");
+                        send_file(fp, i);
                     } else {
                         if (execute_command(data.read, return_buffer) < 0) {
                         // TODO: add error print function
                         exit(EXIT_FAILURE);
-                    }
+                        }
+
+                        int bytes_sent = send(i, return_buffer, strlen(return_buffer), 0);
                     }
 
-                    int bytes_sent = send(i, return_buffer, strlen(return_buffer), 0);
                     #ifdef VERBOSE
                     printf("Bytes sent: %d [strlen(return_buffer): %lu]\n", bytes_sent, strlen(return_buffer));
                     #endif
@@ -218,4 +222,23 @@ int execute_command(char* command, char* return_buffer) {
         }
     }
     return status;
+}
+
+
+void send_file(FILE *fp, int sockfd) {
+    int n;
+    char data[1024] = {0};
+    
+    printf("SENDING FILE...\n");
+    while (fgets(data, 1024, fp) != NULL) {
+        printf("SENDING: [%s]\n", data);
+        if (send(sockfd, data, strlen(data), 0) < 0) {
+            perror("send");
+            exit(1);
+        }
+        bzero(data, 1024);
+    }
+    close(sockfd);
+    
+    printf("FILE SENT\n");
 }
