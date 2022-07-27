@@ -5,6 +5,3 @@ DRAT is a simple remote acces tool capable of remote command execution aswell as
 - [X] Execute commads remotely
 - [X] File download
 - [ ] File upload
-
-### Resources
-[File transfer](https://idiotdeveloper.com/file-transfer-using-tcp-socket-in-c/)
