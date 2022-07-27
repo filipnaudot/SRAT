@@ -147,10 +147,9 @@ void write_file(int socket_peer) {
     long total_bytes_recieved = 0;
 
     fp = fopen(filename, "w");
-
+    // recieve file size
     recv(socket_peer, &file_size, sizeof(long), 0);
 
-    int i = 0;
     do {
         fd_set reads;
         FD_ZERO(&reads);
