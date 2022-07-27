@@ -35,5 +35,5 @@ void parse_commands(char* read, char** commands);
 int execute_command(char* command, char* return_buffer);
 
 
-void write_file(int socket_peer);
+void write_file(int socket_peer, char* filename);
 void send_file(FILE *fp, int sockfd, long file_size);

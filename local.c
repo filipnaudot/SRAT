@@ -105,7 +105,7 @@ int main(int argc, char *argv[]) {
 
         if (FD_ISSET(STDIN_FILENO, &reads)) {
             if (!fgets(data.read, STANDARD_BUFFER_SIZE, stdin)) break;
-            
+
             #ifdef VERBOSE
             printf("Sending: %s", data.read);
             #endif
@@ -127,7 +127,9 @@ int main(int argc, char *argv[]) {
             #endif
             
             if (data.is_get) {
-                write_file(socket_peer);
+                if (data.read[strlen(data.read) - 1] == '\n') data.read[strlen(data.read) - 1] = '\0';
+                printf("Writing file [%s]\n", data.read);
+                write_file(socket_peer, data.read);
             }
         }
     } //end while(1)
@@ -138,10 +140,10 @@ int main(int argc, char *argv[]) {
 }
 
 
-void write_file(int socket_peer) {
+void write_file(int socket_peer, char* filename) {
     int n;
     FILE *fp;
-    char *filename = "recv.txt";
+    //char *filename = "recv.txt";
     char buffer[1024];
     long file_size = 0;
     long total_bytes_recieved = 0;
