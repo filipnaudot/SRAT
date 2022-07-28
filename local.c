@@ -91,8 +91,7 @@ int main(int argc, char *argv[]) {
         }
 
         data_packet data;
-        data.is_get = false;
-        data.is_put = false;
+        data.transfer_status = NO_TRANSFER;
         memset(&data.read, 0, sizeof(data.read));
 
         if (FD_ISSET(socket_peer, &reads)) {
@@ -112,22 +111,34 @@ int main(int argc, char *argv[]) {
             #endif
 
             if (strncmp("get ", data.read, 4) == 0) {
-                data.is_get = true;
+                data.transfer_status = GET;
+                // make prepare_data function
                 int i;
                 for (i =  0; i < strlen(data.read) - 4; i++) {
                     data.read[i] = data.read[i+4];
                 }
                 data.read[i] = '\0';
             }
+            /*
+            else if (strncmp("put ", data.read, 4) == 0) {
+                data.is_put = true;
+                // make prepare_data function
+                int i;
+                for (i =  0; i < strlen(data.read) - 4; i++) {
+                    data.read[i] = data.read[i+4];
+                }
+                data.read[i] = '\0';
+            }
+            */
 
-            send(socket_peer, &data.is_get, sizeof(data.is_get), 0); 
+            send(socket_peer, &data.transfer_status, sizeof(data.transfer_status), 0); 
             int bytes_sent = send(socket_peer, data.read, strlen(data.read), 0); 
             
             #ifdef VERBOSE
             printf("Sent %d bytes.\n", bytes_sent);
             #endif
             
-            if (data.is_get) {
+            if (data.transfer_status == GET) {
                 if (data.read[strlen(data.read) - 1] == '\n') data.read[strlen(data.read) - 1] = '\0';
                 write_file(socket_peer, data.read);
             }
