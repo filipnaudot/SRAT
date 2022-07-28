@@ -112,24 +112,21 @@ int main(int argc, char *argv[]) {
 
             if (strncmp("get ", data.read, 4) == 0) {
                 data.transfer_status = GET;
-                // make prepare_data function
+                // make prepare_filename function
+                int i;
+                for (i =  0; i < strlen(data.read) - 4; i++) {
+                    data.read[i] = data.read[i+4];
+                }
+                data.read[i] = '\0';
+            } else if (strncmp("put ", data.read, 4) == 0) {
+                data.transfer_status = PUT;
+                // make prepare_filename function
                 int i;
                 for (i =  0; i < strlen(data.read) - 4; i++) {
                     data.read[i] = data.read[i+4];
                 }
                 data.read[i] = '\0';
             }
-            /*
-            else if (strncmp("put ", data.read, 4) == 0) {
-                data.is_put = true;
-                // make prepare_data function
-                int i;
-                for (i =  0; i < strlen(data.read) - 4; i++) {
-                    data.read[i] = data.read[i+4];
-                }
-                data.read[i] = '\0';
-            }
-            */
 
             send(socket_peer, &data.transfer_status, sizeof(data.transfer_status), 0); 
             int bytes_sent = send(socket_peer, data.read, strlen(data.read), 0); 
@@ -141,6 +138,16 @@ int main(int argc, char *argv[]) {
             if (data.transfer_status == GET) {
                 if (data.read[strlen(data.read) - 1] == '\n') data.read[strlen(data.read) - 1] = '\0';
                 write_file(socket_peer, data.read);
+            } else if (data.transfer_status == PUT) {
+                if (data.read[strlen(data.read) - 1] == '\n') data.read[strlen(data.read) - 1] = '\0';
+                printf("OPENING [%s]\n", data.read);
+                FILE* fp = fopen(data.read, "r");
+
+                fseek(fp, 0L, SEEK_END);
+                long file_size = ftell(fp);
+                fseek(fp, 0L, SEEK_SET);
+
+                send_file(fp, socket_peer, file_size);
             }
         }
     } //end while(1)
@@ -148,6 +155,25 @@ int main(int argc, char *argv[]) {
     close(socket_peer);
 
     return 0;
+}
+
+
+void send_file(FILE *fp, int sockfd, long file_size) {
+    int n;
+    char data[1024] = {0};
+
+    if (send(sockfd, &file_size, sizeof(long), 0) < 0) {
+        perror("send");
+        exit(1);
+    }
+
+    while (fgets(data, 1024, fp) != NULL) {
+        if (send(sockfd, data, strlen(data), 0) < 0) {
+            perror("send");
+            exit(1);
+        }
+        bzero(data, 1024);
+    }
 }
 
 
