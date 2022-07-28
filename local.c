@@ -128,7 +128,6 @@ int main(int argc, char *argv[]) {
             
             if (data.is_get) {
                 if (data.read[strlen(data.read) - 1] == '\n') data.read[strlen(data.read) - 1] = '\0';
-                printf("Writing file [%s]\n", data.read);
                 write_file(socket_peer, data.read);
             }
         }
