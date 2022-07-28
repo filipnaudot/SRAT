@@ -22,10 +22,14 @@
 #define true 1
 #define false 0
 
+// Tranfer status
+#define NO_TRANSFER 0
+#define GET 1
+#define PUT 2
+
 
 typedef struct data_packet {
-    int is_get;
-    int is_put;
+    int transfer_status;
     char read[STANDARD_BUFFER_SIZE];
 } data_packet;
 
