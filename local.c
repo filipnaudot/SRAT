@@ -92,6 +92,7 @@ int main(int argc, char *argv[]) {
 
         data_packet data;
         data.is_get = false;
+        data.is_put = false;
         memset(&data.read, 0, sizeof(data.read));
 
         if (FD_ISSET(socket_peer, &reads)) {
