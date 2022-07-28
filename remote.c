@@ -115,7 +115,7 @@ int main(int argc, char *argv[]) {
                 } else {
                     data_packet data;
 
-                    recv(i, &data.is_get, sizeof(int), 0);
+                    recv(i, &data.transfer_status, sizeof(int), 0);
                     int bytes_received = recv(i, data.read, MAX_RECEIVE, 0); // receieve MAX_RECEIVE bytes
                     // remove traling new line char
                     if (data.read[bytes_received - 1] == '\n') data.read[bytes_received - 1] = '\0';
@@ -141,7 +141,7 @@ int main(int argc, char *argv[]) {
                     // TODO: allocate return_buffer dynamically
                     char return_buffer[STANDARD_BUFFER_SIZE] = {'\0'}; // Buffer to write in to
 
-                    if (data.is_get) {
+                    if (data.transfer_status == GET) {
                         FILE* fp = fopen(data.read, "r");
 
                         fseek(fp, 0L, SEEK_END);
