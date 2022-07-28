@@ -25,6 +25,7 @@
 
 typedef struct data_packet {
     int is_get;
+    int is_put;
     char read[STANDARD_BUFFER_SIZE];
 } data_packet;
 
