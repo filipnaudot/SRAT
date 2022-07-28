@@ -57,4 +57,5 @@ dkms.conf
 .vscode/
 
 # other
-test_file.txt
+test_file_remote.txt
+test_file_local.txt

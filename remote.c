@@ -149,6 +149,9 @@ int main(int argc, char *argv[]) {
                         fseek(fp, 0L, SEEK_SET);
 
                         send_file(fp, i, file_size);
+                    } else if (data.transfer_status == PUT) {
+                        printf("RECIEVING [%s]\n", data.read);
+                        write_file(i, data.read);
                     } else {
                         if (execute_command(data.read, return_buffer) < 0) {
                         // TODO: add error print function
@@ -244,4 +247,50 @@ void send_file(FILE *fp, int sockfd, long file_size) {
         }
         bzero(data, 1024);
     }
+}
+
+void write_file(int socket_peer, char* filename) {
+    int n;
+    FILE *fp;
+    char buffer[1024];
+    long file_size = 0;
+    long total_bytes_recieved = 0;
+
+    fp = fopen(filename, "w");
+    // recieve file size
+    recv(socket_peer, &file_size, sizeof(long), 0);
+
+    do {
+        fd_set reads;
+        FD_ZERO(&reads);
+        FD_SET(socket_peer, &reads);
+        FD_SET(STDIN_FILENO, &reads);
+
+        struct timeval timeout;
+        timeout.tv_sec = 0;
+        timeout.tv_usec = 100000;
+
+        /*
+        if (select(socket_peer+1, &reads, 0, 0, &timeout) < 0) {
+            perror("select");
+            exit(1);
+        }
+        */
+
+        if (FD_ISSET(socket_peer, &reads)) {
+            int n = recv(socket_peer, buffer, 1024, 0);
+            total_bytes_recieved += n;
+        
+            fprintf(fp, "%s", buffer);
+            bzero(buffer, 1024);
+        }
+
+        /*
+        if (total_bytes_recieved == file_size) {
+            break;
+        }
+        */
+    } while(total_bytes_recieved < file_size);
+
+    fclose(fp);
 }
