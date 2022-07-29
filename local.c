@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
 
         data_packet data;
         data.transfer_status = NO_TRANSFER;
-        memset(&data.read, '\0', sizeof(data.read));
+        memset(&data.read, '\0', STANDARD_BUFFER_SIZE);
 
         if (FD_ISSET(socket_peer, &reads)) {
             int bytes_received = recv(socket_peer, data.read, STANDARD_BUFFER_SIZE, 0);
@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
         }
 
         if (FD_ISSET(STDIN_FILENO, &reads)) {
-            memset(&data.read, '\0', sizeof(data.read));
+            memset(&data.read, '\0', STANDARD_BUFFER_SIZE);
             if (!fgets(data.read, STANDARD_BUFFER_SIZE, stdin)) break;
 
             #ifdef VERBOSE
