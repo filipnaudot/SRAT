@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
 
         data_packet data;
         data.transfer_status = NO_TRANSFER;
-        memset(&data.read, 0, sizeof(data.read));
+        memset(&data.read, '\0', sizeof(data.read));
 
         if (FD_ISSET(socket_peer, &reads)) {
             int bytes_received = recv(socket_peer, data.read, STANDARD_BUFFER_SIZE, 0);
@@ -112,12 +112,14 @@ int main(int argc, char *argv[]) {
 
             if (strncmp("get ", data.read, 4) == 0) {
                 data.transfer_status = GET;
-                // make prepare_filename function
+                retreive_filename(data.read);
+                /*
                 int i;
                 for (i =  0; i < strlen(data.read) - 4; i++) {
                     data.read[i] = data.read[i+4];
                 }
                 data.read[i] = '\0';
+                */
             } else if (strncmp("put ", data.read, 4) == 0) {
                 data.transfer_status = PUT;
                 // make prepare_filename function
@@ -162,10 +164,13 @@ void send_file(FILE *fp, int sockfd, long file_size) {
     int n;
     char data[1024] = {0};
 
+
+    printf("SENDING file_size...\n");
     if (send(sockfd, &file_size, sizeof(long), 0) < 0) {
         perror("send");
         exit(1);
     }
+    printf("DONE SENDING file_size\n");
 
     while (fgets(data, 1024, fp) != NULL) {
         if (send(sockfd, data, strlen(data), 0) < 0) {
@@ -212,4 +217,14 @@ void write_file(int socket_peer, char* filename) {
     } while(total_bytes_recieved < file_size);
 
     fclose(fp);
+}
+
+
+
+void retreive_filename(char* string) {
+    int i;
+    for (i =  0; i < strlen(string) - 4; i++) {
+        string[i] = string[i+4];
+    }
+    string[i] = '\0';
 }
