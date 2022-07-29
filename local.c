@@ -104,6 +104,7 @@ int main(int argc, char *argv[]) {
         }
 
         if (FD_ISSET(STDIN_FILENO, &reads)) {
+            memset(&data.read, '\0', sizeof(data.read));
             if (!fgets(data.read, STANDARD_BUFFER_SIZE, stdin)) break;
 
             #ifdef VERBOSE
@@ -113,21 +114,9 @@ int main(int argc, char *argv[]) {
             if (strncmp("get ", data.read, 4) == 0) {
                 data.transfer_status = GET;
                 retreive_filename(data.read);
-                /*
-                int i;
-                for (i =  0; i < strlen(data.read) - 4; i++) {
-                    data.read[i] = data.read[i+4];
-                }
-                data.read[i] = '\0';
-                */
             } else if (strncmp("put ", data.read, 4) == 0) {
                 data.transfer_status = PUT;
-                // make prepare_filename function
-                int i;
-                for (i =  0; i < strlen(data.read) - 4; i++) {
-                    data.read[i] = data.read[i+4];
-                }
-                data.read[i] = '\0';
+                retreive_filename(data.read);
             }
 
             send(socket_peer, &data.transfer_status, sizeof(data.transfer_status), 0); 
