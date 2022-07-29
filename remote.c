@@ -269,12 +269,10 @@ void write_file(int socket_peer, char* filename) {
         timeout.tv_sec = 0;
         timeout.tv_usec = 100000;
 
-        /*
         if (select(socket_peer+1, &reads, 0, 0, &timeout) < 0) {
             perror("select");
             exit(1);
         }
-        */
 
         if (FD_ISSET(socket_peer, &reads)) {
             int n = recv(socket_peer, buffer, 1024, 0);
