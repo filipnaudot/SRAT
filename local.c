@@ -212,7 +212,7 @@ void write_file(int socket_peer, char* filename) {
 
 void retreive_filename(char* string) {
     int i;
-    for (i =  0; i < strlen(string) - 4; i++) {
+    for (i = 0; i < (strlen(string) - 4); i++) {
         string[i] = string[i+4];
     }
     string[i] = '\0';
