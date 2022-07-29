@@ -264,7 +264,6 @@ void write_file(int socket_peer, char* filename) {
         fd_set reads;
         FD_ZERO(&reads);
         FD_SET(socket_peer, &reads);
-        FD_SET(STDIN_FILENO, &reads);
 
         struct timeval timeout;
         timeout.tv_sec = 0;
@@ -284,12 +283,6 @@ void write_file(int socket_peer, char* filename) {
             fprintf(fp, "%s", buffer);
             bzero(buffer, 1024);
         }
-
-        /*
-        if (total_bytes_recieved == file_size) {
-            break;
-        }
-        */
     } while(total_bytes_recieved < file_size);
 
     fclose(fp);
