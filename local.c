@@ -122,7 +122,6 @@ int main(int argc, char *argv[]) {
                 retreive_filename(data.read);
                 if (data.read[strlen(data.read) - 1] == '\n') data.read[strlen(data.read) - 1] = '\0';
                 size_t filename_size = strlen(data.read);
-                printf("FILENAME [%s]    SIZE [%zu]\n", data.read, filename_size);
                 send(socket_peer, &filename_size, sizeof(size_t), 0);
                 send(socket_peer, data.read, strlen(data.read), 0);
             }
@@ -141,8 +140,6 @@ int main(int argc, char *argv[]) {
                 if (data.read[strlen(data.read) - 1] == '\n') data.read[strlen(data.read) - 1] = '\0';
                 write_file(socket_peer, data.read);
             } else if (data.transfer_status == PUT) {
-                printf("OPENING [%s]\n", data.read);
-
                 FILE* fp = fopen(data.read, "r");
                 fseek(fp, 0L, SEEK_END);
                 long file_size = ftell(fp);
@@ -168,14 +165,11 @@ void send_file(FILE *fp, int sockfd, long file_size) {
         exit(1);
     }
 
-    printf("SENT file_size [%ld]\n", file_size);
-
     while (fgets(data, 1024, fp) != NULL) {
         if (send(sockfd, data, strlen(data), 0) < 0) {
             perror("send");
             exit(1);
         }
-        printf("SENT [%s]\n", data);
         bzero(data, 1024);
     }
 }
