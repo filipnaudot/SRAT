@@ -116,27 +116,35 @@ int main(int argc, char *argv[]) {
                     data_packet data;
 
                     recv(i, &data.transfer_status, sizeof(int), 0);
-                    int bytes_received = recv(i, data.read, MAX_RECEIVE, 0); // receieve MAX_RECEIVE bytes
-                    // remove traling new line char
-                    if (data.read[bytes_received - 1] == '\n') data.read[bytes_received - 1] = '\0';
-
-                    if (bytes_received < 1) {
-                        #ifdef VERBOSE
-                        printf("Connection closed\n");
-                        #endif
-                        FD_CLR(i, &master);
-                        close(i);
-                        continue;
-                    }
+                    // ---------------- START HANDLE PUT ----------------
+                    if (data.transfer_status == PUT) {
+                        size_t filename_size;
+                        recv(i, &filename_size, sizeof(size_t), 0);
+                        recv(i, data.read, filename_size, 0);
+                        printf("FILENAME [%s]    SIZE [%zu]\n", data.read, filename_size);
+                        // ---------------- END HANDLE PUT ----------------
+                    } else {
+                        int bytes_received = recv(i, data.read, MAX_RECEIVE, 0);
+                        // remove traling new line char
+                        if (data.read[bytes_received - 1] == '\n') data.read[bytes_received - 1] = '\0';
+                        if (bytes_received < 1) {
+                            #ifdef VERBOSE
+                            printf("Connection closed\n");
+                            #endif
+                            FD_CLR(i, &master);
+                            close(i);
+                            continue;
+                        }
                     
-                    #ifdef VERBOSE
-                    printf("Recieved %d bytes\n", bytes_received);
+                        #ifdef VERBOSE
+                        printf("Recieved %d bytes\n", bytes_received);
 
-                    for (int i = 0; i < bytes_received; i++) {
-                        printf("%c", data.read[i]);
+                        for (int i = 0; i < bytes_received; i++) {
+                            printf("%c", data.read[i]);
+                        }
+                        printf("\n");
+                        #endif
                     }
-                    printf("\n");
-                    #endif
                     
                     // TODO: allocate return_buffer dynamically
                     char return_buffer[STANDARD_BUFFER_SIZE] = {'\0'}; // Buffer to write in to
@@ -150,14 +158,13 @@ int main(int argc, char *argv[]) {
 
                         send_file(fp, i, file_size);
                     } else if (data.transfer_status == PUT) {
-                        printf("RECIEVING [%s]\n", data.read);
+                        if (data.read[strlen(data.read) - 1] == '\n') data.read[strlen(data.read) - 1] = '\0';
                         write_file(i, data.read);
                     } else {
                         if (execute_command(data.read, return_buffer) < 0) {
-                        // TODO: add error print function
-                        exit(EXIT_FAILURE);
+                            // TODO: add error print function
+                            exit(EXIT_FAILURE);
                         }
-
                         int bytes_sent = send(i, return_buffer, strlen(return_buffer), 0);
                     }
 
@@ -253,12 +260,15 @@ void write_file(int socket_peer, char* filename) {
     int n;
     FILE *fp;
     char buffer[1024];
-    long file_size = 0;
+    long file_size = 33;
     long total_bytes_recieved = 0;
 
     fp = fopen(filename, "w");
+
     // recieve file size
+    printf("RECEIVING file_size...\n");
     recv(socket_peer, &file_size, sizeof(long), 0);
+    printf("file_size = [%ld]\n", file_size);
 
     do {
         fd_set reads;
@@ -275,9 +285,11 @@ void write_file(int socket_peer, char* filename) {
         }
 
         if (FD_ISSET(socket_peer, &reads)) {
+            printf("RECEIVING packet...\n");
             int n = recv(socket_peer, buffer, 1024, 0);
             total_bytes_recieved += n;
-        
+            printf("buffer = [%s]\n", buffer);
+
             fprintf(fp, "%s", buffer);
             bzero(buffer, 1024);
         }
