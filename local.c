@@ -115,11 +115,13 @@ int main(int argc, char *argv[]) {
                 data.transfer_status = GET;
                 retreive_filename(data.read);
             } else if (strncmp("put ", data.read, 4) == 0) {
+                printf("(BEFORE) data.read: [%s]\n", data.read);
                 data.transfer_status = PUT;
                 retreive_filename(data.read);
+                printf("(AFTER) data.read: [%s]\n", data.read);
             }
 
-            send(socket_peer, &data.transfer_status, sizeof(data.transfer_status), 0); 
+            send(socket_peer, &data.transfer_status, sizeof(int), 0); 
             int bytes_sent = send(socket_peer, data.read, strlen(data.read), 0); 
             
             #ifdef VERBOSE
