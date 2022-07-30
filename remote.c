@@ -114,6 +114,7 @@ int main(int argc, char *argv[]) {
 
                 } else {
                     data_packet data;
+                    data.transfer_status = NO_TRANSFER;
 
                     recv(i, &data.transfer_status, sizeof(int), 0);
                     // ---------------- START HANDLE PUT ----------------
@@ -121,7 +122,6 @@ int main(int argc, char *argv[]) {
                         size_t filename_size;
                         recv(i, &filename_size, sizeof(size_t), 0);
                         recv(i, data.read, filename_size, 0);
-                        printf("FILENAME [%s]    SIZE [%zu]\n", data.read, filename_size);
                         // ---------------- END HANDLE PUT ----------------
                     } else {
                         int bytes_received = recv(i, data.read, MAX_RECEIVE, 0);
@@ -266,9 +266,7 @@ void write_file(int socket_peer, char* filename) {
     fp = fopen(filename, "w");
 
     // recieve file size
-    printf("RECEIVING file_size...\n");
     recv(socket_peer, &file_size, sizeof(long), 0);
-    printf("file_size = [%ld]\n", file_size);
 
     do {
         fd_set reads;
@@ -285,10 +283,8 @@ void write_file(int socket_peer, char* filename) {
         }
 
         if (FD_ISSET(socket_peer, &reads)) {
-            printf("RECEIVING packet...\n");
             int n = recv(socket_peer, buffer, 1024, 0);
             total_bytes_recieved += n;
-            printf("buffer = [%s]\n", buffer);
 
             fprintf(fp, "%s", buffer);
             bzero(buffer, 1024);
