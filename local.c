@@ -130,11 +130,11 @@ int main(int argc, char *argv[]) {
             if (data.transfer_status != PUT) {
                 send(socket_peer, &data.transfer_status, sizeof(int), 0); 
                 int bytes_sent = send(socket_peer, data.read, strlen(data.read), 0);
+                
+                #ifdef VERBOSE
+                printf("Sent %d bytes.\n", bytes_sent);
+                #endif
             }
-
-            #ifdef VERBOSE
-            printf("Sent %d bytes.\n", bytes_sent);
-            #endif
             
             if (data.transfer_status == GET) {
                 if (data.read[strlen(data.read) - 1] == '\n') data.read[strlen(data.read) - 1] = '\0';
