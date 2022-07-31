@@ -260,7 +260,7 @@ void write_file(int socket_peer, char* filename) {
     int n;
     FILE *fp;
     char buffer[1024];
-    long file_size = 33;
+    long file_size = 0;
     long total_bytes_recieved = 0;
 
     fp = fopen(filename, "w");
