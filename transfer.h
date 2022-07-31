@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <unistd.h>
 #include <netdb.h>
 
 void send_file(FILE *fp, int sockfd, long file_size);
