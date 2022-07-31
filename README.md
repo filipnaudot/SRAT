@@ -11,4 +11,4 @@ SRAT is a simple remote acces tool capable of remote command execution aswell as
 ## Requirements
 - [X] Execute commads remotely
 - [X] File download
-- [ ] File upload
+- [X] File upload
