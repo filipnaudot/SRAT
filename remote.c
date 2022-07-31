@@ -168,11 +168,11 @@ int main(int argc, char *argv[]) {
                             exit(EXIT_FAILURE);
                         }
                         int bytes_sent = send(i, return_buffer, strlen(return_buffer), 0);
+                        
+                        #ifdef VERBOSE
+                        printf("Bytes sent: %d\n", bytes_sent);
+                        #endif
                     }
-
-                    #ifdef VERBOSE
-                    printf("Bytes sent: %d [strlen(return_buffer): %lu]\n", bytes_sent, strlen(return_buffer));
-                    #endif
                 }
 
             } //if FD_ISSET
