@@ -148,7 +148,6 @@ int main(int argc, char *argv[]) {
                         #endif
                     }
                     
-                    // TODO: allocate return_buffer dynamically
                     char return_buffer[STANDARD_BUFFER_SIZE] = {'\0'}; // Buffer to write in to
 
                     if (data.transfer_status == GET) {

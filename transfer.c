@@ -26,8 +26,7 @@ void write_file(int socket_peer, char* filename) {
     long total_bytes_recieved = 0;
 
     fp = fopen(filename, "w");
-
-    // recieve file size
+    
     recv(socket_peer, &file_size, sizeof(long), 0);
 
     do {
