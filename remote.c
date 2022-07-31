@@ -117,7 +117,8 @@ int main(int argc, char *argv[]) {
                 } else {
                     data_packet data;
                     data.transfer_status = NO_TRANSFER;
-
+                    memset(&data.read, '\0', STANDARD_BUFFER_SIZE);
+                    
                     recv(i, &data.transfer_status, sizeof(int), 0);
                     // ---------------- START HANDLE PUT ----------------
                     if (data.transfer_status == PUT) {
@@ -147,7 +148,7 @@ int main(int argc, char *argv[]) {
                         printf("\n");
                         #endif
                     }
-                    
+
                     char return_buffer[STANDARD_BUFFER_SIZE] = {'\0'}; // Buffer to write in to
 
                     if (data.transfer_status == GET) {
