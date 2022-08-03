@@ -10,7 +10,6 @@ SRAT is a simple remote acces tool capable of remote command execution aswell as
 
 
 ### TODO
-- Add a proper Makefile
-- Refactor and clean
 - Add proper error handling
-- comments & documentation
+- Refactor and clean
+- Documentation
