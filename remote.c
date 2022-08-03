@@ -184,10 +184,11 @@ int main(int argc, char *argv[]) {
 
 
 /**
- * @brief Executes given command
+ * @brief execute given command string
  * 
- * @param command string containing command
- * @return int the execution status
+ * @param command the command string to be executed
+ * @param return_buffer the output from the command execution
+ * @return int the execution status, 0 on success, -1 on failure
  */
 int execute_command(char* command, char* return_buffer) {
     pid_t pid;

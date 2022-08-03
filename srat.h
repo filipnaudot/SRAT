@@ -27,20 +27,42 @@
 #define GET 1
 #define PUT 2
 
+typedef struct addrinfo addrinfo;
 
 typedef struct data_packet {
     int transfer_status;
     char read[STANDARD_BUFFER_SIZE];
 } data_packet;
 
-
-typedef struct addrinfo addrinfo;
-
-void parse_commands(char* read, char** commands);
+/**
+ * @brief execute given command string
+ * 
+ * @param command the command string to be executed
+ * @param return_buffer the output from the command execution
+ * @return int the execution status, 0 on success, -1 on failure
+ */
 int execute_command(char* command, char* return_buffer);
 
-
+/**
+ * @brief Recives and writes file
+ * 
+ * @param socket_peer the socket used to recieve the file
+ * @param filename the name of the file
+ */
 void write_file(int socket_peer, char* filename);
+
+/**
+ * @brief Reads and sends a file
+ * 
+ * @param fp file pointer to the file to send
+ * @param sockfd the socket used the send file
+ * @param file_size the size of the file to send
+ */
 void send_file(FILE *fp, int sockfd, long file_size);
 
+/**
+ * @brief retrieves name of a file to either send or recieve
+ * 
+ * @param string string with command including the file name
+ */
 void retreive_filename(char* string);

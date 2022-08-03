@@ -1,5 +1,13 @@
 #include "transfer.h"
 
+
+/**
+ * @brief Reads and sends a file
+ * 
+ * @param fp file pointer to the file to send
+ * @param sockfd the socket used the send file
+ * @param file_size the size of the file to send
+ */
 void send_file(FILE *fp, int sockfd, long file_size) {
     int n;
     char data[1024] = {0};
@@ -18,6 +26,13 @@ void send_file(FILE *fp, int sockfd, long file_size) {
     }
 }
 
+
+/**
+ * @brief Recives and writes file
+ * 
+ * @param socket_peer the socket used to recieve the file
+ * @param filename the name of the file
+ */
 void write_file(int socket_peer, char* filename) {
     int n;
     FILE *fp;

@@ -156,7 +156,11 @@ int main(int argc, char *argv[]) {
 }
 
 
-
+/**
+ * @brief retrieves name of a file to either send or recieve
+ * 
+ * @param string string with command including the file name
+ */
 void retreive_filename(char* string) {
     int i;
     for (i = 0; i < (strlen(string) - 4); i++) {
