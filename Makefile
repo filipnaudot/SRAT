@@ -23,7 +23,7 @@ local: $(SRCDIR)/local.o $(SRCDIR)/transfer.o
 remote: $(SRCDIR)/remote.o $(SRCDIR)/transfer.o
 	mkdir -p $(OUTPUTDIR)
 	$(CC) -o $(OUTPUTNAME_REMOTE) $(SRCDIR)/remote.o $(SRCDIR)/transfer.o
-	mv $(OUTPUTNAME_REMOTE)$(OUTPUTDIR)
+	mv $(OUTPUTNAME_REMOTE) $(OUTPUTDIR)
 	mkdir -p $(OBJDIR)
 	mv $(SRCDIR)/*.o $(OBJDIR)
 
