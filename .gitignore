@@ -35,8 +35,7 @@
 *.i*86
 *.x86_64
 *.hex
-local
-remote
+out
 
 # Debug files
 *.dSYM/
