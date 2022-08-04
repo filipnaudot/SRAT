@@ -3,7 +3,7 @@
 
 int main(int argc, char *argv[]) {
     if (argc < 3) {
-        fprintf(stderr, "usage: tcp_client hostname port\n");
+        fprintf(stderr, "usage: local [IP] [PORT]\n");
         return 1;
     }
 
