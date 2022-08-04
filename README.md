@@ -12,7 +12,7 @@ or
 ```console
 make remote
 ```
-to clean `out` and `obj` execute
+To clean `out` and `obj` execute
 ```console
 make clean
 ```
