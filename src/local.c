@@ -97,6 +97,7 @@ int main(int argc, char *argv[]) {
         if (FD_ISSET(STDIN_FILENO, &reads)) {
             memset(&data.read, '\0', STANDARD_BUFFER_SIZE);
             if (!fgets(data.read, STANDARD_BUFFER_SIZE, stdin)) break;
+            if (data.read[strlen(data.read) - 1] == '\n') data.read[strlen(data.read) - 1] = '\0';
 
             #ifdef VERBOSE
             printf("Sending: %s", data.read);
@@ -109,7 +110,6 @@ int main(int argc, char *argv[]) {
                 data.transfer_status = PUT;
                 send(socket_peer, &data.transfer_status, sizeof(int), 0);
                 retreive_filename(data.read);
-                if (data.read[strlen(data.read) - 1] == '\n') data.read[strlen(data.read) - 1] = '\0';
                 size_t filename_size = strlen(data.read);
                 // Send size of file name
                 send(socket_peer, &filename_size, sizeof(size_t), 0);
@@ -127,7 +127,6 @@ int main(int argc, char *argv[]) {
             }
             
             if (data.transfer_status == GET) {
-                if (data.read[strlen(data.read) - 1] == '\n') data.read[strlen(data.read) - 1] = '\0';
                 write_file(socket_peer, data.read);
             } else if (data.transfer_status == PUT) {
                 FILE* fp = fopen(data.read, "r");
