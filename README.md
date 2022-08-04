@@ -31,7 +31,7 @@ Now everything sent will be executed as a terminal command on the remote machine
 
 
 ### Commands
-| command              | Description                           |
+| Command              | Description                           |
 | -----------          | -----------                           |
 | get [filename]       | Download a file from remote           |
 | put [filename]       | Upload a file to remote               |
