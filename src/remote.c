@@ -140,7 +140,7 @@ int main(int argc, char *argv[]) {
                         #endif
                     }
 
-                    char return_buffer[STANDARD_BUFFER_SIZE] = {'\0'}; // Buffer to write in to
+                    char return_buffer[STANDARD_BUFFER_SIZE] = {'\0'};
 
                     if (data.transfer_status == GET) {
                         FILE* fp = fopen(data.read, "r");
