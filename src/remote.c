@@ -114,7 +114,9 @@ int main(int argc, char *argv[]) {
                     // ---------------- START HANDLE PUT ----------------
                     if (data.transfer_status == PUT) {
                         size_t filename_size;
+                        // Recieve size of the file name
                         recv(i, &filename_size, sizeof(size_t), 0);
+                        // Receive the file name
                         recv(i, data.read, filename_size, 0);
                         // ---------------- END HANDLE PUT ----------------
                     } else {

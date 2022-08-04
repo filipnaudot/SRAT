@@ -102,22 +102,21 @@ int main(int argc, char *argv[]) {
             printf("Sending: %s", data.read);
             #endif
             
-            
             if (strncmp("get ", data.read, 4) == 0) {
                 data.transfer_status = GET;
                 retreive_filename(data.read);
             } else if (strncmp("put ", data.read, 4) == 0) {
                 data.transfer_status = PUT;
                 send(socket_peer, &data.transfer_status, sizeof(int), 0);
-
                 retreive_filename(data.read);
                 if (data.read[strlen(data.read) - 1] == '\n') data.read[strlen(data.read) - 1] = '\0';
                 size_t filename_size = strlen(data.read);
+                // Send size of file name
                 send(socket_peer, &filename_size, sizeof(size_t), 0);
+                // Send the file name
                 send(socket_peer, data.read, strlen(data.read), 0);
             }
             
-
             if (data.transfer_status != PUT) {
                 send(socket_peer, &data.transfer_status, sizeof(int), 0); 
                 int bytes_sent = send(socket_peer, data.read, strlen(data.read), 0);
