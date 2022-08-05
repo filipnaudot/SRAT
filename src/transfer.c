@@ -45,26 +45,12 @@ void write_file(int socket, char* filename) {
     recv(socket, &file_size, sizeof(long), 0);
 
     do {
-        fd_set reads;
-        FD_ZERO(&reads);
-        FD_SET(socket, &reads);
+        int n = recv(socket, buffer, 1024, 0);
+        total_bytes_recieved += n;
 
-        struct timeval timeout;
-        timeout.tv_sec = 0;
-        timeout.tv_usec = 100000;
-
-        if (select(socket+1, &reads, 0, 0, &timeout) < 0) {
-            perror("select");
-            exit(1);
-        }
-
-        if (FD_ISSET(socket, &reads)) {
-            int n = recv(socket, buffer, 1024, 0);
-            total_bytes_recieved += n;
-
-            fprintf(fp, "%s", buffer);
-            bzero(buffer, 1024);
-        }
+        fprintf(fp, "%s", buffer);
+        bzero(buffer, 1024);
+        
     } while(total_bytes_recieved < file_size);
 
     fclose(fp);
