@@ -119,7 +119,8 @@ int main(int argc, char *argv[]) {
                     } else {
                         int bytes_received = recv(i, data.read, MAX_RECEIVE, 0);
                         // remove traling new line char
-                        if (data.read[bytes_received - 1] == '\n') data.read[bytes_received - 1] = '\0';
+                        data.read[strcspn(data.read, "\n")] = '\0';
+                        
                         if (bytes_received < 1) {
                             #ifdef VERBOSE
                             printf("Connection closed\n");
