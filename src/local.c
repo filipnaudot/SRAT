@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
         if (FD_ISSET(STDIN_FILENO, &reads)) {
             memset(&data.read, '\0', STANDARD_BUFFER_SIZE);
             if (!fgets(data.read, STANDARD_BUFFER_SIZE, stdin)) break;
-            if (data.read[strlen(data.read) - 1] == '\n') data.read[strlen(data.read) - 1] = '\0';
+            data.read[strcspn(data.read, "\n")] = '\0';
 
             #ifdef VERBOSE
             printf("Sending: %s", data.read);
