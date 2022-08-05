@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include <sys/wait.h>
 #include <sys/types.h>
@@ -15,6 +16,7 @@
 #define ISVALIDSOCKET(s) ((s) >= 0)
 #define SOCKET int
 
+#define REMOTE_PORT "8080"
 
 #define MAX_RECEIVE 1024
 #define STANDARD_BUFFER_SIZE 4096

@@ -1,9 +1,6 @@
 #include "srat.h"
 #include "transfer.h"
 
-#include <ctype.h>
-
-#define PORT "8080"
 
 int main(int argc, char *argv[]) {
     #ifdef VERBOSE
@@ -17,7 +14,7 @@ int main(int argc, char *argv[]) {
     hints.ai_flags = AI_PASSIVE;
 
     addrinfo *bind_address;
-    getaddrinfo(0, PORT, &hints, &bind_address);
+    getaddrinfo(0, REMOTE_PORT, &hints, &bind_address);
 
     #ifdef VERBOSE
     printf("Creating socket...\n");
