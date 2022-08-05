@@ -27,7 +27,7 @@ this will start `remote` and by defult it will listen on port `8080` for new con
 ./out/local [IP] [PORT]
 ```
 
-Now everything sent will be executed as a terminal command on the remote machine. Additional functionality is documented under [Commands](#Commands).
+Now everything sent will be executed as a command on the remote machine. Additional functionality is documented under [Commands](#Commands).
 
 
 ### Commands
