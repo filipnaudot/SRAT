@@ -41,4 +41,3 @@ Now everything sent will be executed as a command on the remote machine. Additio
 - Error handling
 - Refactor and clean
     - Separate srat.h into two h-files for remote and local
-- Documentation
