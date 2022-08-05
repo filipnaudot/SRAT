@@ -1,3 +1,5 @@
+<img src="{https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black}" />
+
 # SRAT
 SRAT is a simple remote acces tool capable of remote command execution aswell as file upload and download.
 
