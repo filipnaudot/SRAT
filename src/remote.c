@@ -144,11 +144,7 @@ int main(int argc, char *argv[]) {
 
                     if (data.transfer_status == GET) {
                         FILE* fp = fopen(data.read, "r");
-
-                        fseek(fp, 0L, SEEK_END);
-                        long file_size = ftell(fp);
-                        fseek(fp, 0L, SEEK_SET);
-
+                        long file_size = get_file_size(fp);
                         send_file(fp, i, file_size);
                     } else if (data.transfer_status == PUT) {
                         if (data.read[strlen(data.read) - 1] == '\n') data.read[strlen(data.read) - 1] = '\0';

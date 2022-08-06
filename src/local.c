@@ -130,11 +130,7 @@ int main(int argc, char *argv[]) {
                 write_file(socket_peer, data.read);
             } else if (data.transfer_status == PUT) {
                 FILE* fp = fopen(data.read, "r");
-                // TODO: Make function get_file_size() in transfer
-                fseek(fp, 0L, SEEK_END);
-                long file_size = ftell(fp);
-                fseek(fp, 0L, SEEK_SET);
-
+                long file_size = get_file_size(fp);
                 send_file(fp, socket_peer, file_size);
             }
         }

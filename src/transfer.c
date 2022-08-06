@@ -55,3 +55,17 @@ void write_file(int socket, char* filename) {
 
     fclose(fp);
 }
+
+
+/**
+ * @brief Get size of a given file
+ * 
+ * @param fp the file pointer
+ * @return long the size of the file
+ */
+long get_file_size(FILE* fp) {
+    fseek(fp, 0L, SEEK_END);
+    long file_size = ftell(fp);
+    fseek(fp, 0L, SEEK_SET);
+    return file_size;
+}

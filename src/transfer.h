@@ -23,3 +23,12 @@ void send_file(FILE *fp, int socket, long file_size);
  * @param filename the name of the file
  */
 void write_file(int socket, char* filename);
+
+
+/**
+ * @brief Get size of a given file
+ * 
+ * @param fp the file pointer
+ * @return long the size of the file
+ */
+long get_file_size(FILE* fp);
