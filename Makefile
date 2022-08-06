@@ -1,4 +1,3 @@
-
 CC = gcc
 
 OBJDIR = obj
@@ -13,30 +12,32 @@ all: local remote
 
 
 
-local: $(SRCDIR)/local.o $(SRCDIR)/transfer.o
+local: local.o transfer.o
 	mkdir -p $(OUTPUTDIR)
-	$(CC) -o $(OUTPUTNAME_LOCAL) $(SRCDIR)/local.o $(SRCDIR)/transfer.o
+	$(CC) -o $(OUTPUTNAME_LOCAL) $(OBJDIR)/local.o $(OBJDIR)/transfer.o
 	mv $(OUTPUTNAME_LOCAL) $(OUTPUTDIR)
-	mkdir -p $(OBJDIR)
-	mv $(SRCDIR)/*.o $(OBJDIR)
 
-remote: $(SRCDIR)/remote.o $(SRCDIR)/transfer.o
+remote: remote.o transfer.o
 	mkdir -p $(OUTPUTDIR)
-	$(CC) -o $(OUTPUTNAME_REMOTE) $(SRCDIR)/remote.o $(SRCDIR)/transfer.o
+	$(CC) -o $(OUTPUTNAME_REMOTE) $(OBJDIR)/remote.o $(OBJDIR)/transfer.o
 	mv $(OUTPUTNAME_REMOTE) $(OUTPUTDIR)
-	mkdir -p $(OBJDIR)
-	mv $(SRCDIR)/*.o $(OBJDIR)
 
 
 
 local.o: $(SRCDIR)/local.c
 	$(CC) -c $(SRCDIR)/local.c
+	mkdir -p $(OBJDIR)
+	mv local.o $(OBJDIR)
 
 remote.o: $(SRCDIR)/remote.c
 	$(CC) -c $(SRCDIR)/remote.c
+	mkdir -p $(OBJDIR)
+	mv remote.o $(OBJDIR)
 
 transfer.o: $(SRCDIR)/transfer.c
 	$(CC) -c $(SRCDIR)/transfer.c
+	mkdir -p $(OBJDIR)
+	mv transfer.o $(OBJDIR)
 
 
 
