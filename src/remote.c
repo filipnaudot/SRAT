@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
         #ifdef VERBOSE
         perror("socket");
         #endif
-        return 1;
+        exit(EXIT_FAILURE);
     }
 
     #ifdef VERBOSE
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
         #ifdef VERBOSE
         perror("bind");
         #endif
-        return 1;
+        exit(EXIT_FAILURE);
     }
     freeaddrinfo(bind_address);
 
@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
         #ifdef VERBOSE
         perror("listen");
         #endif
-        return 1;
+        exit(EXIT_FAILURE);
     }
 
     fd_set master;
@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
             #ifdef VERBOSE
             perror("select");
             #endif
-            return 1;
+            exit(EXIT_FAILURE);
         }
 
         for(SOCKET i = 1; i <= max_socket; ++i) {
@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
                         #ifdef VERBOSE
                         perror("accept");
                         #endif
-                        return 1;
+                        exit(EXIT_FAILURE);
                     }
 
                     FD_SET(socket_client, &master);

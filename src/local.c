@@ -4,7 +4,7 @@
 int main(int argc, char *argv[]) {
     if (argc < 3) {
         fprintf(stderr, "usage: local [IP] [PORT]\n");
-        return 1;
+        exit(EXIT_FAILURE);
     }
 
     #ifdef VERBOSE
@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
     addrinfo *peer_address;
     if (getaddrinfo(argv[1], argv[2], &hints, &peer_address)) {
         perror("getaddrinfo");
-        return 1;
+        exit(EXIT_FAILURE);
     }
 
     #ifdef VERBOSE
@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
                         peer_address->ai_protocol);
     if (!ISVALIDSOCKET(socket_peer)) {
         perror("socket");
-        return 1;
+        exit(EXIT_FAILURE);
     }
 
     #ifdef VERBOSE
@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
 
     if (connect(socket_peer, peer_address->ai_addr, peer_address->ai_addrlen)) {
         perror("connect");
-        return 1;
+        exit(EXIT_FAILURE);
     }
     freeaddrinfo(peer_address);
 
@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
 
         if (select(socket_peer+1, &reads, 0, 0, &timeout) < 0) {
             perror("select");
-            return 1;
+            exit(EXIT_FAILURE);
         }
 
         data_packet data;
