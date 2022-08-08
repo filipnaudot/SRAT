@@ -38,6 +38,23 @@ Now everything sent will be executed as a command on the remote machine. Additio
 | get [filename]       | Download a file from remote           |
 | put [filename]       | Upload a file to remote               |
 
+#### File transfer protocol
+GET
+```sequence
+local->remote: GET
+local->remote: filename
+remote-->local: file size
+remote-->local: file
+```
+PUT
+```sequence
+local->remote: PUT
+local->remote: size of filename
+local->remote: filename
+local->remote: file size
+local->remote: file
+```
+
 
 ### TODO
 - Error handling
