@@ -39,20 +39,37 @@ Now everything sent will be executed as a command on the remote machine. Additio
 | put [filename]       | Upload a file to remote               |
 
 #### File transfer protocol
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+
 GET
-```sequence
-local->remote: GET
-local->remote: filename
-remote-->local: file size
-remote-->local: file
-```
++-------+         +-------+
+|local  |         |remote |
++---+---+         +----+--+
+    |                  |
+    |                  |
+    |      GET         |
+    +----------------->|
+    |                  |
+    |      filename    |
+    +----------------->|
+    |                  |
+    |      file size   |
+    |<-----------------+
+    |                  |
+    |       file       |
+    +<-----------------+
+                       
 PUT
-```sequence
-local->remote: PUT
-local->remote: size of filename
-local->remote: filename
-local->remote: file size
-local->remote: file
+```Sequence
+local-->remote: PUT
+local-->remote: size of filename
+local-->remote: filename
+local-->remote: file size
+local-->remote: file
 ```
 
 
