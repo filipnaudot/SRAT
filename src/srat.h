@@ -28,6 +28,8 @@
 #define NO_TRANSFER 0
 #define GET 1
 #define PUT 2
+#define FILE_EXISTS 3
+#define FILE_MISSING 4
 
 typedef struct addrinfo addrinfo;
 
