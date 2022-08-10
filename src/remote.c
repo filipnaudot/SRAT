@@ -144,8 +144,16 @@ int main(int argc, char *argv[]) {
 
                     if (data.transfer_status == GET) {
                         FILE* fp = fopen(data.read, "r");
-                        long file_size = get_file_size(fp);
-                        send_file(fp, current_socket, file_size);
+                        if (fp != NULL) {
+                            data.transfer_status = FILE_EXISTS;
+                            send(current_socket, &data.transfer_status, sizeof(int), 0);
+
+                            long file_size = get_file_size(fp);
+                            send_file(fp, current_socket, file_size);
+                        } else {
+                            data.transfer_status = FILE_MISSING;
+                            send(current_socket, &data.transfer_status, sizeof(int), 0);
+                        }
                     } else if (data.transfer_status == PUT) {
                         if (data.read[strlen(data.read) - 1] == '\n') data.read[strlen(data.read) - 1] = '\0';
                         write_file(current_socket, data.read);
