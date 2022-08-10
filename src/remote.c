@@ -70,9 +70,9 @@ int main(int argc, char *argv[]) {
             exit(EXIT_FAILURE);
         }
 
-        for(SOCKET i = 1; i <= max_socket; ++i) {
-            if (FD_ISSET(i, &reads)) {
-                if (i == socket_listen) {
+        for(SOCKET current_socket = 1; current_socket <= max_socket; ++current_socket) {
+            if (FD_ISSET(current_socket, &reads)) {
+                if (current_socket == socket_listen) {
                     struct sockaddr_storage client_address;
                     socklen_t client_len = sizeof(client_address);
                     SOCKET socket_client = accept(socket_listen,
@@ -107,17 +107,17 @@ int main(int argc, char *argv[]) {
                     data.transfer_status = NO_TRANSFER;
                     memset(&data.read, '\0', STANDARD_BUFFER_SIZE);
                     
-                    recv(i, &data.transfer_status, sizeof(int), 0);
+                    recv(current_socket, &data.transfer_status, sizeof(int), 0);
                     // ---------------- START HANDLE PUT ----------------
                     if (data.transfer_status == PUT) {
                         size_t filename_size;
                         // Recieve size of the file name
-                        recv(i, &filename_size, sizeof(size_t), 0);
+                        recv(current_socket, &filename_size, sizeof(size_t), 0);
                         // Receive the file name
-                        recv(i, data.read, filename_size, 0);
+                        recv(current_socket, data.read, filename_size, 0);
                         // ---------------- END HANDLE PUT ----------------
                     } else {
-                        int bytes_received = recv(i, data.read, MAX_RECEIVE, 0);
+                        int bytes_received = recv(current_socket, data.read, MAX_RECEIVE, 0);
                         // remove traling new line char
                         data.read[strcspn(data.read, "\n")] = '\0';
                         
@@ -125,8 +125,8 @@ int main(int argc, char *argv[]) {
                             #ifdef VERBOSE
                             printf("Connection closed\n");
                             #endif
-                            FD_CLR(i, &master);
-                            close(i);
+                            FD_CLR(current_socket, &master);
+                            close(current_socket);
                             continue;
                         }
                     
@@ -145,16 +145,16 @@ int main(int argc, char *argv[]) {
                     if (data.transfer_status == GET) {
                         FILE* fp = fopen(data.read, "r");
                         long file_size = get_file_size(fp);
-                        send_file(fp, i, file_size);
+                        send_file(fp, current_socket, file_size);
                     } else if (data.transfer_status == PUT) {
                         if (data.read[strlen(data.read) - 1] == '\n') data.read[strlen(data.read) - 1] = '\0';
-                        write_file(i, data.read);
+                        write_file(current_socket, data.read);
                     } else {
                         if (execute_command(data.read, return_buffer) < 0) {
                             // TODO: add error print function
                             exit(EXIT_FAILURE);
                         }
-                        int bytes_sent = send(i, return_buffer, strlen(return_buffer), 0);
+                        int bytes_sent = send(current_socket, return_buffer, strlen(return_buffer), 0);
                         
                         #ifdef VERBOSE
                         printf("Bytes sent: %d\n", bytes_sent);
