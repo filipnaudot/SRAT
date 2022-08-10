@@ -127,7 +127,11 @@ int main(int argc, char *argv[]) {
             }
             
             if (data.transfer_status == GET) {
-                write_file(socket_peer, data.read);
+                recv(socket_peer, &data.transfer_status, sizeof(int), 0);
+                if (data.transfer_status == FILE_EXISTS) {
+                    write_file(socket_peer, data.read);    
+                }
+                //write_file(socket_peer, data.read);
             } else if (data.transfer_status == PUT) {
                 FILE* fp = fopen(data.read, "r");
                 long file_size = get_file_size(fp);
