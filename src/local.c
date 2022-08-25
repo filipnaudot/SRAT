@@ -20,10 +20,6 @@ int main(int argc, char *argv[]) {
         perror("getaddrinfo");
         exit(EXIT_FAILURE);
     }
-
-    #ifdef VERBOSE
-    printf("Remote address is: ");
-    #endif
     
     char address_buffer[100];
     char service_buffer[100];
@@ -35,11 +31,7 @@ int main(int argc, char *argv[]) {
                 sizeof(service_buffer),
                 NI_NUMERICHOST);
     #ifdef VERBOSE
-    printf("%s %s\n", address_buffer, service_buffer);
-    #endif
-
-
-    #ifdef VERBOSE
+    printf("Remote address is: %s %s\n", address_buffer, service_buffer);
     printf("Creating socket...\n");
     #endif
 
