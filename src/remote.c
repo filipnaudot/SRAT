@@ -3,6 +3,9 @@
 
 
 int main(int argc, char *argv[]) {
+    char* REMOTE_PORT = "8080";
+    if (argc == 2) REMOTE_PORT =  argv[1];
+
     #ifdef VERBOSE
     printf("Configuring local address...\n");
     #endif

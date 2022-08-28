@@ -16,8 +16,6 @@
 #define ISVALIDSOCKET(s) ((s) >= 0)
 #define SOCKET int
 
-#define REMOTE_PORT "8080"
-
 #define MAX_RECEIVE 1024
 #define STANDARD_BUFFER_SIZE 4096
 
