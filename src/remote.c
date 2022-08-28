@@ -135,7 +135,6 @@ int main(int argc, char *argv[]) {
                     
                         #ifdef VERBOSE
                         printf("Recieved %d bytes\n", bytes_received);
-
                         for (int i = 0; i < bytes_received; i++) {
                             printf("%c", data.read[i]);
                         }
