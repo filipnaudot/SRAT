@@ -22,11 +22,11 @@ make clean
 ## Run SRAT
 To run SRAT start by executing
 ```console
-./out/remote
+./out/remote [PORT]
 ```
 this will start `remote` and by defult it will listen on port `8080` for new connections. The next step is to run `out/local` and give it the remote IP-address and port to connect to.
 ```console
-./out/local [IP] [PORT]
+./out/local <IP> <PORT>
 ```
 
 Now everything sent will be executed as a command on the remote machine. Additional functionality is documented under [Commands](#Commands).
