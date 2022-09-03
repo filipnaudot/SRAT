@@ -35,8 +35,8 @@ Now everything sent will be executed as a command on the remote machine. Additio
 ### Commands
 | Command              | Description                           |
 | -----------          | -----------                           |
-| get [filename]       | Download a file from remote           |
-| put [filename]       | Upload a file to remote               |
+| get &lt;filename&gt; | Download a file from remote           |
+| put &lt;filename&gt; | Upload a file to remote               |
 
 
 ### TODO
