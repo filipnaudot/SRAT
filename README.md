@@ -41,4 +41,5 @@ Now everything sent will be executed as a command on the remote machine. Additio
 
 ### TODO
 - More error handling
+- Add encryption
 - Refactor
