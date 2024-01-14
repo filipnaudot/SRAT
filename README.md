@@ -39,8 +39,15 @@ Now everything sent will be executed as a command on the remote machine. Additio
 | put &lt;filename&gt; | Upload a file to remote               |
 
 
+### Limitations
+- Directory of remote is not updated. To list file in subdrectory you need to run something like:
+```console
+cd ./dir_name && ls
+```
+- Until serialization is fixed you may experiance bugs.
+
 ### TODO
+- Refactor!
 - Serialize data packets
 - More error handling
 - Add encryption
-- Refactor
