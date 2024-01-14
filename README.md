@@ -1,7 +1,7 @@
 <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black" /> <img src="https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=apple&logoColor=white" />
 
 # SRAT
-SRAT is a simple remote acces tool capable of remote command execution aswell as file upload and download.
+SRAT is a very simple remote acces tool capable of remote command execution aswell as file upload and download.
 
 ## Build Instructions
 To build simply execute `make`. This will build both `out/local` and `out/remote`.
