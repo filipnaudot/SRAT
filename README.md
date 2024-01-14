@@ -40,10 +40,6 @@ Now everything sent will be executed as a command on the remote machine. Additio
 
 
 ### TODO
-- Name changes
-	- remote.c --> srat.c
-	- local.c  --> c2c.c
-	- Update makefile and documentation with new names
 - Serialize data packets
 - More error handling
 - Add encryption
