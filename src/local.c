@@ -11,48 +11,7 @@ int main(int argc, char *argv[]) {
     printf("Configuring remote address...\n");
     #endif
 
-    addrinfo hints;
-    memset(&hints, 0, sizeof(hints));
-    hints.ai_socktype = SOCK_STREAM;
-
-    addrinfo *peer_address;
-    if (getaddrinfo(argv[1], argv[2], &hints, &peer_address)) {
-        perror("getaddrinfo");
-        exit(EXIT_FAILURE);
-    }
-    
-    char address_buffer[100];
-    char service_buffer[100];
-    getnameinfo(peer_address->ai_addr,
-                peer_address->ai_addrlen,
-                address_buffer,
-                sizeof(address_buffer),
-                service_buffer,
-                sizeof(service_buffer),
-                NI_NUMERICHOST);
-    #ifdef VERBOSE
-    printf("Remote address is: %s %s\n", address_buffer, service_buffer);
-    printf("Creating socket...\n");
-    #endif
-
-    SOCKET socket_peer;
-    socket_peer = socket(peer_address->ai_family,
-                        peer_address->ai_socktype,
-                        peer_address->ai_protocol);
-    if (!ISVALIDSOCKET(socket_peer)) {
-        perror("socket");
-        exit(EXIT_FAILURE);
-    }
-
-    #ifdef VERBOSE
-    printf("Connecting...\n");
-    #endif
-
-    if (connect(socket_peer, peer_address->ai_addr, peer_address->ai_addrlen)) {
-        perror("connect");
-        exit(EXIT_FAILURE);
-    }
-    freeaddrinfo(peer_address);
+    SOCKET socket_peer = get_connection(argv[1], argv[2]);
 
     #ifdef VERBOSE
     printf("Connected.\n");
@@ -137,15 +96,58 @@ int main(int argc, char *argv[]) {
 }
 
 
-/**
- * @brief retrieves name of a file to either send or recieve
- * 
- * @param string string with command including the file name
- */
 void retreive_filename(char* string) {
     int i;
     for (i = 0; i < (strlen(string) - 4); i++) {
         string[i] = string[i+4];
     }
     string[i] = '\0';
+}
+
+
+SOCKET get_connection(char* ip, char* port) {
+    addrinfo hints;
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_socktype = SOCK_STREAM;
+
+    addrinfo *peer_address;
+    if (getaddrinfo(ip, port, &hints, &peer_address)) {
+        perror("getaddrinfo");
+        exit(EXIT_FAILURE);
+    }
+    
+    char address_buffer[100];
+    char service_buffer[100];
+    getnameinfo(peer_address->ai_addr,
+                peer_address->ai_addrlen,
+                address_buffer,
+                sizeof(address_buffer),
+                service_buffer,
+                sizeof(service_buffer),
+                NI_NUMERICHOST);
+    #ifdef VERBOSE
+    printf("Remote address is: %s %s\n", address_buffer, service_buffer);
+    printf("Creating socket...\n");
+    #endif
+
+    SOCKET socket_peer;
+    socket_peer = socket(peer_address->ai_family,
+                        peer_address->ai_socktype,
+                        peer_address->ai_protocol);
+    if (!ISVALIDSOCKET(socket_peer)) {
+        perror("socket");
+        exit(EXIT_FAILURE);
+    }
+
+    #ifdef VERBOSE
+    printf("Connecting...\n");
+    #endif
+
+    if (connect(socket_peer, peer_address->ai_addr, peer_address->ai_addrlen)) {
+        perror("connect");
+        exit(EXIT_FAILURE);
+    }
+    freeaddrinfo(peer_address);
+
+    return socket_peer;
 }

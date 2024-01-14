@@ -51,3 +51,13 @@ int execute_command(char* command, char* return_buffer);
  * @param string string with command including the file name
  */
 void retreive_filename(char* string);
+
+/**
+ * @brief Creates a connection to remote host and returns socket
+ * 
+ * @param ip the ip-address of remote host
+ * @param port the remote host port to connect to
+ * 
+ * @return SOCKET the new socket connected to remote host
+ */
+SOCKET get_connection(char* ip, char* port);
